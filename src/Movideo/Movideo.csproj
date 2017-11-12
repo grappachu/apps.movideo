@@ -29,8 +29,8 @@
     <MapFileExtensions>true</MapFileExtensions>
     <UpdateUrl>http://localhost/Movideo/</UpdateUrl>
     <ProductName>Movideo</ProductName>
-    <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>0.1.0.%2a</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>0.1.1.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <ExcludeDeploymentUrl>true</ExcludeDeploymentUrl>
@@ -75,8 +75,8 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="Grappachu.Core, Version=2.0.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Grappachu.Core.2.0.3\lib\net461\Grappachu.Core.dll</HintPath>
+    <Reference Include="Grappachu.Core, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Grappachu.Core.2.1.0\lib\net461\Grappachu.Core.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
@@ -148,7 +148,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="MatchDialog.xaml.cs">
+    <Compile Include="ConfigReader.cs" />
+    <Compile Include="UI\Dialogs\ApiKeyDialog.xaml.cs">
+      <DependentUpon>ApiKeyDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Dialogs\MatchDialog.xaml.cs">
       <DependentUpon>MatchDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="TextBoxFileScanner.cs" />
@@ -164,7 +168,11 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="MatchDialog.xaml">
+    <Page Include="UI\Dialogs\ApiKeyDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Dialogs\MatchDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

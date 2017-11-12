@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace SistemafilmTest
+namespace Grappachu.Apps.Movideo
 {
     /// <summary>
     ///     Logica di interazione per App.xaml

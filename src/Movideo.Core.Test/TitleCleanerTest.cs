@@ -2,7 +2,7 @@ using Grappachu.Movideo.Core.Helpers.TitleCleaner;
 using SharpTestsEx;
 using Xunit;
 
-namespace Grappachu.MoVideo.Test
+namespace Grappachu.Movideo.Core.Test
 {
     public class TitleCleanerTest
     {

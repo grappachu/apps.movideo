@@ -22,5 +22,53 @@ namespace Grappachu.Apps.Movideo.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastSourceFolder {
+            get {
+                return ((string)(this["LastSourceFolder"]));
+            }
+            set {
+                this["LastSourceFolder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string TmdbApiKey {
+            get {
+                return ((string)(this["TmdbApiKey"]));
+            }
+            set {
+                this["TmdbApiKey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastOutputFolder {
+            get {
+                return ((string)(this["LastOutputFolder"]));
+            }
+            set {
+                this["LastOutputFolder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string TmdbApiCulture {
+            get {
+                return ((string)(this["TmdbApiCulture"]));
+            }
+            set {
+                this["TmdbApiCulture"] = value;
+            }
+        }
     }
 }

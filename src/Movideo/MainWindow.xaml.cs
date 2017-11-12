@@ -8,7 +8,7 @@ using Grappachu.Movideo.Core.Dtos;
 using Grappachu.Movideo.Core.Interfaces;
 using log4net.Core;
 
-namespace SistemafilmTest
+namespace Grappachu.Apps.Movideo
 {
     /// <summary>
     ///     Logica di interazione per MainWindow.xaml
@@ -37,7 +37,10 @@ namespace SistemafilmTest
         private void _movideo_MatchFound(object sender, MatchFoundEventArgs args)
         {
             Task.Yield();
-            RuntimeHelper.RunAsStaThread(() => { MatchDialog.Prompt(args); });
+            RuntimeHelper.RunAsStaThread(() =>
+            {
+                UI.Dialogs.MatchDialog.Prompt(args);
+            });
         }
 
 
@@ -68,6 +71,12 @@ namespace SistemafilmTest
         private void ToggleButton_OnUnchecked(object sender, RoutedEventArgs e)
         {
             TxtTarget.IsEnabled = false;
+        }
+
+        private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
+        {
+           
+             
         }
     }
 }

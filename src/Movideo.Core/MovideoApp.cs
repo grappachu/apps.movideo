@@ -14,7 +14,7 @@ using TMDbLib.Objects.Movies;
 
 namespace Grappachu.Movideo.Core
 {
-    public class MovideoApp
+    public sealed class MovideoApp
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(MovideoApp));
         private readonly IFileAnalyzer _analyzer;
@@ -28,7 +28,13 @@ namespace Grappachu.Movideo.Core
             _fileScanner = fileScanner;
             _analyzer = analyzer;
             _db = db;
-            _apiClient = new TMDbClient("8eb2eaed41168191a9c48786b6b2c3ff")
+
+            ApiSettings apiSettings = configReader.GetApiSettings();
+            if (apiSettings == null)
+            {
+                throw new ArgumentNullException("Impossibile proseguire. API non configurata.");
+            }
+            _apiClient = new TMDbClient(apiSettings.ApiKey)
             {
                 DefaultCountry = "IT",
                 DefaultLanguage = "it"
@@ -285,7 +291,7 @@ namespace Grappachu.Movideo.Core
         {
         }
 
-        protected virtual void OnMatchFound(MatchFoundEventArgs e)
+        private void OnMatchFound(MatchFoundEventArgs e)
         {
             MatchFound?.Invoke(this, e);
         }

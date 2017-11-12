@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using Grappachu.Movideo.Core.Interfaces;
 
-namespace SistemafilmTest
+namespace Grappachu.Apps.Movideo
 {
     public class TextBoxFileScanner : IFileScanner
     {

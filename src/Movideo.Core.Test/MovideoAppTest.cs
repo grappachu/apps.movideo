@@ -1,11 +1,10 @@
 ﻿using System.IO;
-using Grappachu.Movideo.Core;
 using Grappachu.Movideo.Core.Interfaces;
 using Moq;
 using SharpTestsEx;
 using Xunit;
 
-namespace Grappachu.MoVideo.Test
+namespace Grappachu.Movideo.Core.Test
 {
     public class MovideoAppTest
     {
