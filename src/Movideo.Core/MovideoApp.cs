@@ -59,7 +59,8 @@ namespace Grappachu.Movideo.Core
                 var item = _analyzer.Analyze(file);
                 if (!item.IsKnown)
                 {
-                    var res = TryIdentify(item, out float accuracy);
+                    float accuracy;
+                    var res = TryIdentify(item, out accuracy);
                     if (res != null)
                     {
                         var args = new MatchFoundEventArgs(item, res, accuracy);
@@ -76,7 +77,8 @@ namespace Grappachu.Movideo.Core
                 }
                 else
                 {
-                    var res = TryIdentify(item, out float accuracy);
+                    float accuracy;
+                    var res = TryIdentify(item, out accuracy);
                     var args = new MatchFoundEventArgs(item, res, 1);
                     OnMatchFound(args);
 

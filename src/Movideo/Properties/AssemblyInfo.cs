@@ -7,12 +7,12 @@ using System.Windows;
 // Le informazioni generali relative a un assembly sono controllate dal seguente 
 // set di attributi. Modificare i valori di questi attributi per modificare le informazioni
 // associate a un assembly.
-[assembly: AssemblyTitle("SistemafilmTest")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Movideo")]
+[assembly: AssemblyDescription("Movideo - Sistema Film")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SistemafilmTest")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyCompany("Davide Prenassi Software")]
+[assembly: AssemblyProduct("Movideo")]
+[assembly: AssemblyCopyright("Copyright © Davide Prenassi, 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
