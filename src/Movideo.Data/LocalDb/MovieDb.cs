@@ -2,13 +2,12 @@ using System.Linq;
 using Grappachu.Core.Lang.Extensions;
 using Grappachu.Core.Lang.Text;
 using Grappachu.Core.Security.Hashing;
-using Grappachu.Movideo.Core.Data;
 using Grappachu.Movideo.Core.Data.Model;
 using Grappachu.Movideo.Core.Dtos;
 using Grappachu.Movideo.Core.Interfaces;
 using Grappachu.Movideo.Core.Utils;
 
-namespace Grappachu.Movideo.Core
+namespace Grappachu.Movideo.Data.LocalDb
 {
     public class MovieDb : IMovieDb
     {

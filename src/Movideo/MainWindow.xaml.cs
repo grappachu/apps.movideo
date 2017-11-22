@@ -7,6 +7,8 @@ using Grappachu.Movideo.Core;
 using Grappachu.Movideo.Core.Dtos;
 using Grappachu.Movideo.Core.Interfaces;
 using log4net.Core;
+using Grappachu.Movideo.Data;
+using Grappachu.Movideo.Data.LocalDb;
 
 namespace Grappachu.Apps.Movideo
 {

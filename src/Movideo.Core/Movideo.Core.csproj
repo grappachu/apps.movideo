@@ -69,7 +69,6 @@
     <Compile Include="ApiSettings.cs" />
     <Compile Include="Data\Model\MediaBinding.cs" />
     <Compile Include="Data\Model\TmdbGenere.cs" />
-    <Compile Include="Data\MovideoModel.cs" />
     <Compile Include="Dtos\AnalyzedItem.cs" />
     <Compile Include="Data\Model\TmdbMovie.cs" />
     <Compile Include="FileAnalyzer.cs" />
@@ -82,7 +81,6 @@
     <Compile Include="Dtos\MatchFoundEventArgs.cs" />
     <Compile Include="MovideoApp.cs" />
     <Compile Include="MovideoSettings.cs" />
-    <Compile Include="MovieDb.cs" />
     <Compile Include="Data\Model\MediaFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\FileRef.cs" />

@@ -1,7 +1,7 @@
 ﻿using System.Data.Entity;
 using Grappachu.Movideo.Core.Data.Model;
 
-namespace Grappachu.Movideo.Core.Data
+namespace Grappachu.Movideo.Data.LocalDb
 {
     public class MovideoModel : DbContext
     {
