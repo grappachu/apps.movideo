@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Grappachu.Movideo.Core.Data.Model
+namespace Grappachu.Movideo.Data.LocalDb.Models
 {
+    [Table("TmdbMovies")]
     public class TmdbMovie
     {
         [Key]

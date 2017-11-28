@@ -1,9 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Grappachu.Movideo.Core.Data.Model
+namespace Grappachu.Movideo.Data.LocalDb.Models
 {
-    public class MediaBinding
+    [Table("MediaBindings")]
+    public class DbMediaBinding
     {
         [MaxLength(32)]
         [Column(Order = 0, TypeName = "varchar")]
@@ -17,4 +18,6 @@ namespace Grappachu.Movideo.Core.Data.Model
 
         public TmdbMovie Movie { get; set; }
     }
+
+
 }

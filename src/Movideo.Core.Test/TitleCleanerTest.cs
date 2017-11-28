@@ -1,4 +1,4 @@
-using Grappachu.Movideo.Core.Helpers.TitleCleaner;
+using Grappachu.Movideo.Core.Components.TitleCleaner;
 using SharpTestsEx;
 using Xunit;
 

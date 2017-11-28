@@ -4,8 +4,10 @@ using System.Windows;
 using Grappachu.Core.Preview.Runtime.Threading;
 using Grappachu.Core.Preview.UI;
 using Grappachu.Movideo.Core;
-using Grappachu.Movideo.Core.Dtos;
+using Grappachu.Movideo.Core.Components.MediaAnalyzer;
+using Grappachu.Movideo.Core.Components.MediaScanner;
 using Grappachu.Movideo.Core.Interfaces;
+using Grappachu.Movideo.Core.Models;
 using log4net.Core;
 using Grappachu.Movideo.Data;
 using Grappachu.Movideo.Data.LocalDb;
@@ -20,7 +22,7 @@ namespace Grappachu.Apps.Movideo
         private readonly FileAnalyzer _analyzer;
         private readonly IConfigReader _configReader;
         private readonly MovideoApp _movideo;
-        private readonly TextBoxFileScanner _scanner;
+        private readonly BasicFileScanner _scanner;
 
         public MainWindow()
         {
@@ -29,7 +31,7 @@ namespace Grappachu.Apps.Movideo
 
             IMovieDb db = new MovieDb();
             _configReader = new ConfigReader();
-            _scanner = new TextBoxFileScanner();
+            _scanner = new BasicFileScanner();
             _analyzer = new FileAnalyzer(db);
 
             _movideo = new MovideoApp(_configReader, _scanner, _analyzer, db);

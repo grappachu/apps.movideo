@@ -1,11 +1,13 @@
 using System.Linq;
+using AutoMapper;
 using Grappachu.Core.Lang.Extensions;
 using Grappachu.Core.Lang.Text;
 using Grappachu.Core.Security.Hashing;
-using Grappachu.Movideo.Core.Data.Model;
-using Grappachu.Movideo.Core.Dtos;
+using Grappachu.Movideo.Core.Components.MediaAnalyzer;
 using Grappachu.Movideo.Core.Interfaces;
+using Grappachu.Movideo.Core.Models;
 using Grappachu.Movideo.Core.Utils;
+using Grappachu.Movideo.Data.LocalDb.Models;
 
 namespace Grappachu.Movideo.Data.LocalDb
 {
@@ -21,8 +23,9 @@ namespace Grappachu.Movideo.Data.LocalDb
 
 
         public bool HasMatch(AnalyzedItem item)
-        {
-            return _ctx.MediaBindings.Any(x => x.Hash == item.Hash && x.MovieId.HasValue);
+        { 
+            return  _ctx.MediaBindings.Any(x => x.Hash == item.Hash && x.MovieId.HasValue);
+
         }
 
         public bool HasHash(FileRef fref)
@@ -75,16 +78,18 @@ namespace Grappachu.Movideo.Data.LocalDb
             _ctx.SaveChanges();
         }
 
-        public void Push(TmdbMovie movie)
+        public void Push(Movie movie)
         {
-            var mov = _ctx.TmdbMovies.SingleOrDefault(x => x.Id == movie.Id);
+            TmdbMovie dbMovie = Mapper.Instance.Map<TmdbMovie>(movie);
+
+            var mov = _ctx.TmdbMovies.SingleOrDefault(x => x.Id == dbMovie.Id);
             if (mov != null)
             {
                 _ctx.TmdbMovies.Remove(mov);
                 _ctx.SaveChanges();
             }
 
-            _ctx.TmdbMovies.Add(movie);
+            _ctx.TmdbMovies.Add(dbMovie);
             _ctx.SaveChanges();
         }
 

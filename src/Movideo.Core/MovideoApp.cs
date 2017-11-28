@@ -5,12 +5,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Grappachu.Core.Lang.Text;
 using Grappachu.Core.Preview.IO;
-using Grappachu.Movideo.Core.Data.Model;
-using Grappachu.Movideo.Core.Dtos;
+using Grappachu.Movideo.Core.Components.MediaAnalyzer;
+using Grappachu.Movideo.Core.Components.MediaScanner;
 using Grappachu.Movideo.Core.Interfaces;
+using Grappachu.Movideo.Core.Models;
 using log4net;
 using TMDbLib.Client;
-using TMDbLib.Objects.Movies;
+using Movie = TMDbLib.Objects.Movies.Movie;
 
 namespace Grappachu.Movideo.Core
 {
@@ -130,7 +131,7 @@ namespace Grappachu.Movideo.Core
             return Path.GetInvalidFileNameChars().Aggregate(fileName, (current, c) => current.Replace(c.ToString(), string.Empty));
         }
 
-        private TmdbMovie TryIdentify(AnalyzedItem item, out float matchAccuracy)
+        private Models.Movie TryIdentify(AnalyzedItem item, out float matchAccuracy)
         {
             Log.DebugFormat("Querying remote: {0} ({1})", item.Title, item.Year);
             IEnumerable<string> tokens = new[] { item.Title };
@@ -185,7 +186,7 @@ namespace Grappachu.Movideo.Core
             return null;
         }
 
-        public string GetRenamedPath(AnalyzedItem item, TmdbMovie movie)
+        public string GetRenamedPath(AnalyzedItem item, Models.Movie movie)
         {
             var frenamed = CleanFileName(Path.ChangeExtension(movie.Title +
                                                 (movie.Year.HasValue ? " (" + movie.Year.Value + ")" : string.Empty)
@@ -250,9 +251,9 @@ namespace Grappachu.Movideo.Core
             return res / 16;
         }
 
-        private static TmdbMovie MapDbItem(Movie match)
+        private static Models.Movie MapDbItem(Movie match)
         {
-            var res = new TmdbMovie
+            var res = new Models.Movie
             {
                 Id = match.Id,
                 Title = match.Title,
@@ -261,7 +262,7 @@ namespace Grappachu.Movideo.Core
                 Overview = match.Overview,
                 Duration = TimeSpan.FromMinutes(match.Runtime.GetValueOrDefault()),
                 Adult = match.Adult,
-                Genres = match.Genres.Select(g => new TmdbGenere { Id = g.Id, Name = g.Name }).ToArray(),
+                Genres = match.Genres.Select(g => new MovieGenere { Id = g.Id, Name = g.Name }).ToArray(),
                 ImdbId = match.ImdbId,
                 OriginalLanguage = match.OriginalLanguage,
                 Popularity = match.Popularity,
@@ -289,7 +290,7 @@ namespace Grappachu.Movideo.Core
         }
 
 
-        public void UpdateItem(AnalyzedItem item, TmdbMovie res)
+        public void UpdateItem(AnalyzedItem item, Models.Movie res)
         {
         }
 

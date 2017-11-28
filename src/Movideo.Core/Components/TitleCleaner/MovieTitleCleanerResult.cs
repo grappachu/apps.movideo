@@ -1,4 +1,4 @@
-namespace Grappachu.Movideo.Core.Helpers.TitleCleaner
+namespace Grappachu.Movideo.Core.Components.TitleCleaner
 {
     public class MovieTitleCleanerResult
     {

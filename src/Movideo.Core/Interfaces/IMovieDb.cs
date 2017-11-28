@@ -1,7 +1,6 @@
-﻿using Grappachu.Movideo.Core.Data.Model;
-using Grappachu.Movideo.Core.Dtos;
+﻿using Grappachu.Movideo.Core.Components.MediaAnalyzer;
 using Grappachu.Movideo.Core.Utils;
-using TMDbLib.Objects.Movies;
+using Movie = Grappachu.Movideo.Core.Models.Movie;
 
 namespace Grappachu.Movideo.Core.Interfaces
 {
@@ -12,7 +11,7 @@ namespace Grappachu.Movideo.Core.Interfaces
         string GetHashFor(FileRef item);
         int? GetMovieIdFor(AnalyzedItem item);
         void Push(FileRef fref, string hash);
-        void Push(TmdbMovie movieTaskResult);
+        void Push(Movie movieTaskResult);
         void Push(string hash, int movieId);
     }
 }

@@ -1,17 +1,13 @@
 using System;
 using System.IO;
-using System.Linq;
 using Grappachu.Core.Lang.Extensions;
 using Grappachu.Core.Lang.Text;
 using Grappachu.Core.Security.Hashing;
-using Grappachu.Movideo.Core.Dtos;
-using Grappachu.Movideo.Core.Helpers.TitleCleaner;
+using Grappachu.Movideo.Core.Components.TitleCleaner;
 using Grappachu.Movideo.Core.Interfaces;
-using Grappachu.Movideo.Core.Utils;
 using log4net;
 
-
-namespace Grappachu.Movideo.Core
+namespace Grappachu.Movideo.Core.Components.MediaAnalyzer
 {
     public class FileAnalyzer : IFileAnalyzer
     {

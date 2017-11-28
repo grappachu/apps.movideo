@@ -1,7 +1,6 @@
 ﻿using System.IO;
-using Grappachu.Movideo.Core.Dtos;
 
-namespace Grappachu.Movideo.Core.Interfaces
+namespace Grappachu.Movideo.Core.Components.MediaAnalyzer
 {
     public interface IFileAnalyzer
     {

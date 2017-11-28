@@ -2,9 +2,10 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Grappachu.Movideo.Core.Data.Model
+namespace Grappachu.Movideo.Data.LocalDb.Models
 {
-    public class MediaFile
+    [Table("MediaFiles")]
+    public class DbMediaFile
     {
         [Key]
         [MaxLength(32)]
@@ -24,6 +25,6 @@ namespace Grappachu.Movideo.Core.Data.Model
         [ForeignKey("Binding")]
         public string Hash { get; set; }
 
-        public MediaBinding Binding { get; set; }
+        public DbMediaBinding Binding { get; set; }
     }
 }

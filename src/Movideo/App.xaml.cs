@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using Grappachu.Apps.Movideo.Config;
+using log4net.Config;
 
 namespace Grappachu.Apps.Movideo
 {
@@ -7,6 +9,13 @@ namespace Grappachu.Apps.Movideo
     /// </summary>
     public partial class App : Application
     {
+
+        public App()
+        {
+            XmlConfigurator.Configure();
+            AutoMapperConfigurator.Configure();
+        }
+
         private void App_OnStartup(object sender, StartupEventArgs e)
         {
            

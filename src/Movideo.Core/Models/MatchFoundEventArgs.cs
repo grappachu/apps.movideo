@@ -1,15 +1,15 @@
 using System;
-using Grappachu.Movideo.Core.Data.Model;
+using Grappachu.Movideo.Core.Components.MediaAnalyzer;
 
-namespace Grappachu.Movideo.Core.Dtos
+namespace Grappachu.Movideo.Core.Models
 {
     public class MatchFoundEventArgs : EventArgs
     {
         private readonly AnalyzedItem _item;
-        private readonly TmdbMovie _res;
+        private readonly Movie _res;
         private readonly float _accuracy;
 
-        public MatchFoundEventArgs(AnalyzedItem item, TmdbMovie res, float accuracy)
+        public MatchFoundEventArgs(AnalyzedItem item, Movie res, float accuracy)
         {
             _item = item;
             _res = res;
@@ -20,7 +20,7 @@ namespace Grappachu.Movideo.Core.Dtos
 
         public AnalyzedItem LocalFile { get { return _item; } }
 
-        public TmdbMovie Movie { get { return _res; } }
+        public Movie Movie { get { return _res; } }
         public double MatchAccuracy { get { return _accuracy; } }
     }
 }

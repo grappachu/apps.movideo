@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Grappachu.Movideo.Core.Data.Model
+namespace Grappachu.Movideo.Data.LocalDb.Models
 {
+    [Table("TmdbGeneres")]
     public class TmdbGenere
     {
         [Key]
@@ -10,7 +11,7 @@ namespace Grappachu.Movideo.Core.Data.Model
 
         [MaxLength(50)]
         [Column(TypeName = "varchar")]
-        public string Name { get; set; } 
+        public string Name { get; set; }
 
     }
 }

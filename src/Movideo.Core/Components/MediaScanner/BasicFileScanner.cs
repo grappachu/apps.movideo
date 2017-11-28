@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Grappachu.Movideo.Core.Interfaces;
 
-namespace Grappachu.Apps.Movideo
+namespace Grappachu.Movideo.Core.Components.MediaScanner
 {
-    public class TextBoxFileScanner : IFileScanner
+    public class BasicFileScanner : IFileScanner
     {
         public string Path { get; set; }
 

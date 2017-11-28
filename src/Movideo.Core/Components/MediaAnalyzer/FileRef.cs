@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace Grappachu.Movideo.Core.Utils
+namespace Grappachu.Movideo.Core.Components.MediaAnalyzer
 {
     public class FileRef
     {

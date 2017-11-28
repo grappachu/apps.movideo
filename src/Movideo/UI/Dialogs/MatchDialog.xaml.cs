@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Grappachu.Movideo.Core.Dtos;
+using Grappachu.Movideo.Core.Models;
 
 namespace Grappachu.Apps.Movideo.UI.Dialogs
 {

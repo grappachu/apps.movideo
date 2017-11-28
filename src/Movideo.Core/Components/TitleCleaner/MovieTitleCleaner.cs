@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Grappachu.Movideo.Core.Utils;
 
-namespace Grappachu.Movideo.Core.Helpers.TitleCleaner
+namespace Grappachu.Movideo.Core.Components.TitleCleaner
 {
     public class MovieTitleCleaner
     {

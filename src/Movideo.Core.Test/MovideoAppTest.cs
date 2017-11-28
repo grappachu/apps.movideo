@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.IO;
-using Grappachu.Movideo.Core.Dtos;
+using Grappachu.Movideo.Core.Components.MediaAnalyzer;
+using Grappachu.Movideo.Core.Components.MediaScanner;
 using Grappachu.Movideo.Core.Interfaces;
 using Moq;
 using SharpTestsEx;
