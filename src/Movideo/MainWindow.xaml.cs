@@ -1,16 +1,19 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using Grappachu.Apps.Movideo.Properties;
+using Grappachu.Apps.Movideo.UI.Dialogs;
 using Grappachu.Core.Preview.Runtime.Threading;
 using Grappachu.Core.Preview.UI;
 using Grappachu.Movideo.Core;
 using Grappachu.Movideo.Core.Components.MediaAnalyzer;
+using Grappachu.Movideo.Core.Components.MediaOrganizer;
 using Grappachu.Movideo.Core.Components.MediaScanner;
 using Grappachu.Movideo.Core.Interfaces;
 using Grappachu.Movideo.Core.Models;
-using log4net.Core;
-using Grappachu.Movideo.Data;
 using Grappachu.Movideo.Data.LocalDb;
+using log4net.Core;
 
 namespace Grappachu.Apps.Movideo
 {
@@ -41,10 +44,7 @@ namespace Grappachu.Apps.Movideo
         private void _movideo_MatchFound(object sender, MatchFoundEventArgs args)
         {
             Task.Yield();
-            RuntimeHelper.RunAsStaThread(() =>
-            {
-                UI.Dialogs.MatchDialog.Prompt(args);
-            });
+            RuntimeHelper.RunAsStaThread(() => { MatchDialog.Prompt(args); });
         }
 
 
@@ -54,10 +54,15 @@ namespace Grappachu.Apps.Movideo
             var settings = new MovideoSettings
             {
                 Reorganize = ChkRename.IsChecked.GetValueOrDefault(),
-                TargetPath = TxtTarget.SelectedValue
+                TargetPath = TxtTarget.SelectedValue,
+                RenameTemplate = TxtRenameTemplate.Text
             };
             try
             {
+                Settings.Default.LastSourceFolder = TxtFile.SelectedValue;
+                Settings.Default.LastOutputFolder = TxtTarget.SelectedValue;
+                Settings.Default.Save();
+
                 var task = _movideo.ScanAsync(settings);
                 task.Wait();
             }
@@ -69,18 +74,28 @@ namespace Grappachu.Apps.Movideo
 
         private void ToggleButton_OnChecked(object sender, RoutedEventArgs e)
         {
-            TxtTarget.IsEnabled = true;
+            ToggleMoveAndRename(true);
+        }
+
+        private void ToggleMoveAndRename(bool enabled)
+        {
+            TxtTarget.IsEnabled = enabled;
+            TxtRenameTemplate.IsEnabled = enabled;
         }
 
         private void ToggleButton_OnUnchecked(object sender, RoutedEventArgs e)
         {
-            TxtTarget.IsEnabled = false;
+            ToggleMoveAndRename(false);
         }
 
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-           
-             
+            TxtRenameTemplate.Text = FileOrganizer.DefaultTemplate;
+
+            if (Directory.Exists(Settings.Default.LastSourceFolder))
+                TxtFile.SelectedValue = Settings.Default.LastSourceFolder;
+            if (Directory.Exists(Settings.Default.LastOutputFolder))
+                TxtTarget.SelectedValue = Settings.Default.LastOutputFolder;
         }
     }
 }

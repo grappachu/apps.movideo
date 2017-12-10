@@ -6,7 +6,6 @@ using Grappachu.Core.Security.Hashing;
 using Grappachu.Movideo.Core.Components.MediaAnalyzer;
 using Grappachu.Movideo.Core.Interfaces;
 using Grappachu.Movideo.Core.Models;
-using Grappachu.Movideo.Core.Utils;
 using Grappachu.Movideo.Data.LocalDb.Models;
 
 namespace Grappachu.Movideo.Data.LocalDb
@@ -23,8 +22,8 @@ namespace Grappachu.Movideo.Data.LocalDb
 
 
         public bool HasMatch(AnalyzedItem item)
-        { 
-            return  _ctx.MediaBindings.Any(x => x.Hash == item.Hash && x.MovieId.HasValue);
+        {
+            return _ctx.MediaBindings.Any(x => x.Hash == item.Hash && x.MovieId.HasValue);
 
         }
 
@@ -91,6 +90,7 @@ namespace Grappachu.Movideo.Data.LocalDb
 
             _ctx.TmdbMovies.Add(dbMovie);
             _ctx.SaveChanges();
+            movie.Id = dbMovie.Id;
         }
 
         public void Push(string hash, int movieId)

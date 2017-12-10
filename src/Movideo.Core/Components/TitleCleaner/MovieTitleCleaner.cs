@@ -110,7 +110,7 @@ namespace Grappachu.Movideo.Core.Components.TitleCleaner
                 var dataGraph = str.GetBetween(openChar.ToString(), closeChar.ToString());
                 if (LooksLikeYear(dataGraph))
                 {
-                    maybeYear = int.Parse(dataGraph);
+                    maybeYear = int.Parse(dataGraph.Substring(0,4));
                 }
                 else
                 {

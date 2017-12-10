@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Grappachu.Core.Lang.Text;
-using Grappachu.Core.Preview.IO;
 using Grappachu.Movideo.Core.Components.MediaAnalyzer;
+using Grappachu.Movideo.Core.Components.MediaOrganizer;
 using Grappachu.Movideo.Core.Components.MediaScanner;
 using Grappachu.Movideo.Core.Interfaces;
 using Grappachu.Movideo.Core.Models;
@@ -18,9 +17,9 @@ namespace Grappachu.Movideo.Core
     public sealed class MovideoApp
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(MovideoApp));
+
         private readonly IFileAnalyzer _analyzer;
         private readonly TMDbClient _apiClient;
-
         private readonly IMovieDb _db;
         private readonly IFileScanner _fileScanner;
 
@@ -67,6 +66,11 @@ namespace Grappachu.Movideo.Core
                         var args = new MatchFoundEventArgs(item, res, accuracy);
                         OnMatchFound(args);
 
+                        if (args.Cancel)
+                        {
+                            break;
+                        }
+
                         if (args.IsMatch == true)
                         {
                             DoRename(args, settings);
@@ -74,6 +78,7 @@ namespace Grappachu.Movideo.Core
                             UpdateItem(item, res);
                             count++;
                         }
+                     
                     }
                 }
                 else
@@ -82,7 +87,10 @@ namespace Grappachu.Movideo.Core
                     var res = TryIdentify(item, out accuracy);
                     var args = new MatchFoundEventArgs(item, res, 1);
                     OnMatchFound(args);
-
+                    if (args.Cancel)
+                    {
+                        break;
+                    }
                     if (args.IsMatch == true)
                     {
                         DoRename(args, settings);
@@ -97,38 +105,11 @@ namespace Grappachu.Movideo.Core
         {
             if (settings.Reorganize)
             {
-                var fname =GetRenamedPath(args.LocalFile, args.Movie);
-                var target = Path.Combine(settings.TargetPath, fname);
-                var targetPath = SafeAddSuffix(target);
-
-                FilesystemTools.SafeCreateDirectory(Path.GetDirectoryName(targetPath));
-
-                File.Move(args.LocalFile.Path.FullName, targetPath);
-                Log.InfoFormat("Match Saved: {0} ==> {1}", args.LocalFile.Path.Name, targetPath);
+                var organizer = new FileOrganizer(settings.TargetPath, settings.RenameTemplate);
+                var updatedPath = organizer.Organize(args.LocalFile.Path, args.Movie); 
+             
+                Log.InfoFormat("Match Saved: {0} ==> {1}", args.LocalFile.Path.Name, updatedPath);
             }
-        }
-
-        private static string SafeAddSuffix(string fullPath)
-        {
-            int count = 1;
-
-            string fileNameOnly = Path.GetFileNameWithoutExtension(fullPath);
-            string extension = Path.GetExtension(fullPath);
-            string path = Path.GetDirectoryName(fullPath);
-            string newFullPath = fullPath;
-
-            while (File.Exists(newFullPath))
-            {
-                string tempFileName = string.Format("{0}({1})", fileNameOnly, count++);
-                newFullPath = Path.Combine(path, tempFileName + extension);
-            }
-            return newFullPath;
-        }
-
-
-        private static string CleanFileName(string fileName)
-        {
-            return Path.GetInvalidFileNameChars().Aggregate(fileName, (current, c) => current.Replace(c.ToString(), string.Empty));
         }
 
         private Models.Movie TryIdentify(AnalyzedItem item, out float matchAccuracy)
@@ -186,18 +167,7 @@ namespace Grappachu.Movideo.Core
             return null;
         }
 
-        public string GetRenamedPath(AnalyzedItem item, Models.Movie movie)
-        {
-            var frenamed = CleanFileName(Path.ChangeExtension(movie.Title +
-                                                (movie.Year.HasValue ? " (" + movie.Year.Value + ")" : string.Empty)
-                                                + ".ext", item.Path.Extension));
-            if (!String.IsNullOrEmpty(movie.Collection))
-            {
-                frenamed = Path.Combine(movie.Collection, frenamed);
-            }
-            return frenamed;
-        }
-
+   
 
         private static float GetMatch(Movie movie, AnalyzedItem item)
         {
@@ -298,7 +268,6 @@ namespace Grappachu.Movideo.Core
         {
             MatchFound?.Invoke(this, e);
         }
-
-
+        
     }
 }

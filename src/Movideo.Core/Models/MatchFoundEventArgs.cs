@@ -22,5 +22,6 @@ namespace Grappachu.Movideo.Core.Models
 
         public Movie Movie { get { return _res; } }
         public double MatchAccuracy { get { return _accuracy; } }
+        public bool Cancel { get; set; }
     }
 }
