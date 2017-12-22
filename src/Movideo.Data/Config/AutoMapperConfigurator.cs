@@ -7,9 +7,7 @@ namespace Grappachu.Movideo.Data.Config
     public static class AutoMapperConfiguration
     {
         public static void Extend(IMapperConfigurationExpression cfg)
-        {
-        
-
+        { 
             cfg.CreateMap<Movie, TmdbMovie>();
             cfg.CreateMap<TmdbMovie, Movie>();
 

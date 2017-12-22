@@ -70,5 +70,17 @@ namespace Grappachu.Apps.Movideo.Properties {
                 this["TmdbApiCulture"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastRenameTemplate {
+            get {
+                return ((string)(this["LastRenameTemplate"]));
+            }
+            set {
+                this["LastRenameTemplate"] = value;
+            }
+        }
     }
 }

@@ -84,13 +84,18 @@ namespace Grappachu.Movideo.Core
                 else
                 {
                     float accuracy;
+                    var movieId = _db. GetMovieIdFor(item);
+                    var movie = _db.GetMovie(movieId.Value);
+                    item.Title = movie.Title;
+                    item.Year = movie.Year;
+
                     var res = TryIdentify(item, out accuracy);
                     var args = new MatchFoundEventArgs(item, res, 1);
-                    OnMatchFound(args);
-                    if (args.Cancel)
-                    {
-                        break;
-                    }
+                    //OnMatchFound(args);
+                    //if (args.Cancel)
+                    //{
+                    //    break;
+                    //}
                     if (args.IsMatch == true)
                     {
                         DoRename(args, settings);

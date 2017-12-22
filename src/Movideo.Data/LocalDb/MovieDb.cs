@@ -77,6 +77,16 @@ namespace Grappachu.Movideo.Data.LocalDb
             _ctx.SaveChanges();
         }
 
+
+        public Movie GetMovie(int movieId)
+        {
+            var dbMovie = _ctx.TmdbMovies.SingleOrDefault(x => x.Id == movieId);
+
+            var movie = Mapper.Instance.Map<Movie>(dbMovie);
+
+           return movie;
+        }
+
         public void Push(Movie movie)
         {
             TmdbMovie dbMovie = Mapper.Instance.Map<TmdbMovie>(movie);

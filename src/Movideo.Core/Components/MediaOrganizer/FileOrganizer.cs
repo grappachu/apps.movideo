@@ -4,7 +4,6 @@ using System.Linq;
 using Grappachu.Core.Preview.IO;
 using Grappachu.Movideo.Core.Models;
 using log4net;
-using TMDbLib.Objects.General;
 
 namespace Grappachu.Movideo.Core.Components.MediaOrganizer
 {
@@ -61,15 +60,15 @@ namespace Grappachu.Movideo.Core.Components.MediaOrganizer
         }
 
 
-        public string GetRenamedPath(FileInfo item, Movie movie)
+        private string GetRenamedPath(FileInfo item, Movie movie)
         {
             var fren = RenameTemplate;
             fren = fren.Replace(Tokens.Title, movie.Title);
-            fren = fren.Replace(Tokens.Year, movie.Year.HasValue ? movie.Year.Value.ToString() : string.Empty);
+            fren = fren.Replace(Tokens.Year, movie.Year?.ToString() ?? string.Empty);
             fren = fren.Replace(Tokens.Collection, movie.Collection);
             fren = fren.Replace(Tokens.Extension, item.Extension);
             fren = fren.Replace(Tokens.Genre, movie.Genres.FirstOrDefault()?.Name);
-            fren = fren.Replace(Tokens.Extension, string.Join(",", movie.Genres.Select(x => x.Name)));
+            fren = fren.Replace(Tokens.AllGenres, string.Join(",", movie.Genres.Select(x => x.Name)));
 
             while (fren.Contains(@"\\"))
             {
@@ -100,7 +99,7 @@ namespace Grappachu.Movideo.Core.Components.MediaOrganizer
 
             var fileNameOnly = Path.GetFileNameWithoutExtension(fullPath);
             var extension = Path.GetExtension(fullPath);
-            var path = Path.GetDirectoryName(fullPath);
+            var path = Path.GetDirectoryName(fullPath) ?? string.Empty;
             var newFullPath = fullPath;
 
             while (File.Exists(newFullPath))

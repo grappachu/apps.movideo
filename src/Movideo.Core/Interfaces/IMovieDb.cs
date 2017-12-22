@@ -10,6 +10,7 @@ namespace Grappachu.Movideo.Core.Interfaces
         bool HasHash(FileRef item);
         string GetHashFor(FileRef item);
         int? GetMovieIdFor(AnalyzedItem item);
+        Movie GetMovie(int movieId);
         void Push(FileRef fref, string hash);
         void Push(Movie movieTaskResult);
         void Push(string hash, int movieId);

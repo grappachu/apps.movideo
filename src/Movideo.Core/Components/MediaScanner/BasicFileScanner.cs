@@ -11,8 +11,7 @@ namespace Grappachu.Movideo.Core.Components.MediaScanner
 
         public IEnumerable<FileInfo> Scan()
         {
-            string str = Path;
-             
+            string str = Path; 
 
             if (File.Exists(str))
                 return new[] { new FileInfo(str) };

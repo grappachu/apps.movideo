@@ -61,6 +61,7 @@ namespace Grappachu.Apps.Movideo
             {
                 Settings.Default.LastSourceFolder = TxtFile.SelectedValue;
                 Settings.Default.LastOutputFolder = TxtTarget.SelectedValue;
+                Settings.Default.LastRenameTemplate = TxtRenameTemplate.Text;
                 Settings.Default.Save();
 
                 var task = _movideo.ScanAsync(settings);
@@ -90,7 +91,9 @@ namespace Grappachu.Apps.Movideo
 
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            TxtRenameTemplate.Text = FileOrganizer.DefaultTemplate;
+            TxtRenameTemplate.Text = !string.IsNullOrWhiteSpace(Settings.Default.LastRenameTemplate) 
+                ? Settings.Default.LastRenameTemplate
+                : FileOrganizer.DefaultTemplate;
 
             if (Directory.Exists(Settings.Default.LastSourceFolder))
                 TxtFile.SelectedValue = Settings.Default.LastSourceFolder;

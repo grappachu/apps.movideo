@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Windows;
 using Grappachu.Movideo.Core;
 
@@ -8,7 +7,7 @@ namespace Grappachu.Apps.Movideo.UI.Dialogs
     /// <summary>
     ///     Logica di interazione per ApiKeyDialog.xaml
     /// </summary>
-    public partial class ApiKeyDialog : Window
+    public partial class ApiKeyDialog
     {
         public ApiKeyDialog()
         {
