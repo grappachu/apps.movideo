@@ -9,7 +9,7 @@
         Title="Movideo - Sistema Film"
         Height="480"
         Width="640"
-        Loaded="MainWindow_OnLoaded">
+        Loaded="MainWindow_OnLoaded" Icon="Ekisho Deep Ocean Movies.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="26.541" />
@@ -65,15 +65,16 @@
                 HorizontalAlignment="Right"
                 Width="87">Trova</Button>
 
-          <TextBlock Margin="41,80.6,503.6,0"
+        <TextBlock Margin="41,80.6,503.6,0"
                    TextAlignment="Right"
                    Height="23"
                    VerticalAlignment="Top"
                    Grid.Row="1">Template</TextBlock>
         <TextBox x:Name="TxtRenameTemplate"
-                 Margin="135,80.6,164.6,42"
+                 Margin="135,81,165,0"
                  Height="23"
-                 Grid.Row="1"></TextBox>
+                 Grid.Row="1" VerticalAlignment="Top"></TextBox>
+        <ProgressBar x:Name="PrgBar" Margin="135,118,165,0" Grid.Row="1" Height="18" VerticalAlignment="Top"></ProgressBar>
 
         <controls:LogViewer x:Name="LogViewer"
                             DisplayToolbar="False"

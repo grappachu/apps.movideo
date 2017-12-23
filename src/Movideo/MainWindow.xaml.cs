@@ -39,6 +39,15 @@ namespace Grappachu.Apps.Movideo
 
             _movideo = new MovideoApp(_configReader, _scanner, _analyzer, db);
             _movideo.MatchFound += _movideo_MatchFound;
+            _movideo.ProgressChanged += _movideo_ProgressChanged;
+        }
+
+        private void _movideo_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                PrgBar.Value = e.ProgressPercentage;
+            }));
         }
 
         private void _movideo_MatchFound(object sender, MatchFoundEventArgs args)
@@ -57,6 +66,7 @@ namespace Grappachu.Apps.Movideo
                 TargetPath = TxtTarget.SelectedValue,
                 RenameTemplate = TxtRenameTemplate.Text
             };
+
             try
             {
                 Settings.Default.LastSourceFolder = TxtFile.SelectedValue;
@@ -64,13 +74,18 @@ namespace Grappachu.Apps.Movideo
                 Settings.Default.LastRenameTemplate = TxtRenameTemplate.Text;
                 Settings.Default.Save();
 
-                var task = _movideo.ScanAsync(settings);
-                task.Wait();
+              _movideo.ScanAsync(settings)
+                    .ContinueWith(t => { ScanCompleted(settings); }); 
             }
             catch (Exception ex)
             {
                 Dialogs.ShowError(ex.ToString());
             }
+        }
+
+        private void ScanCompleted(MovideoSettings settings)
+        {
+            Dialogs.ShowInfo("Ricerca Completata");
         }
 
         private void ToggleButton_OnChecked(object sender, RoutedEventArgs e)

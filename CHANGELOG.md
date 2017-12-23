@@ -1,6 +1,18 @@
 # Change Log
 
-## [0.1.1]  First version (2017-11-12)
+## [0.1.2]  Release 3 (2017-12-23)
+
+**Added** 
+
+- Changed: No Prompt for known titles
+- Feature: Support for Rename Templates
+- Feature: Progress Info
+- Fixed: Ui unresponsive while scanning 
+- Changed: Assembly Signature
+- Minor bug fixes
+- Icon
+
+## [0.1.1]  Release 2 (2017-11-12)
 
 **Added** 
 

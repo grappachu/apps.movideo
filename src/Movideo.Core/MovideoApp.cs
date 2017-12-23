@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Grappachu.Core.Lang.Text;
@@ -42,6 +43,7 @@ namespace Grappachu.Movideo.Core
         }
 
         public event EventHandler<MatchFoundEventArgs> MatchFound;
+        public event ProgressChangedEventHandler ProgressChanged;
 
         public Task<int> ScanAsync(MovideoSettings settings)
         {
@@ -52,10 +54,17 @@ namespace Grappachu.Movideo.Core
         public int Scan(MovideoSettings settings)
         {
             var count = 0;
+            var index = 0;
 
-            var files = _fileScanner.Scan();
+            var files = _fileScanner.Scan().ToArray();
+            var totalItems = files.Length;
+
+
             foreach (var file in files)
             {
+                index++;
+                OnProgressChanged(index, totalItems);
+
                 var item = _analyzer.Analyze(file);
                 if (!item.IsKnown)
                 {
@@ -78,28 +87,20 @@ namespace Grappachu.Movideo.Core
                             UpdateItem(item, res);
                             count++;
                         }
-                     
+
                     }
                 }
                 else
                 {
                     float accuracy;
-                    var movieId = _db. GetMovieIdFor(item);
+                    var movieId = _db.GetMovieIdFor(item);
                     var movie = _db.GetMovie(movieId.Value);
                     item.Title = movie.Title;
                     item.Year = movie.Year;
 
                     var res = TryIdentify(item, out accuracy);
                     var args = new MatchFoundEventArgs(item, res, 1);
-                    //OnMatchFound(args);
-                    //if (args.Cancel)
-                    //{
-                    //    break;
-                    //}
-                    if (args.IsMatch == true)
-                    {
-                        DoRename(args, settings);
-                    }
+                    DoRename(args, settings);
                 }
             }
 
@@ -111,8 +112,8 @@ namespace Grappachu.Movideo.Core
             if (settings.Reorganize)
             {
                 var organizer = new FileOrganizer(settings.TargetPath, settings.RenameTemplate);
-                var updatedPath = organizer.Organize(args.LocalFile.Path, args.Movie); 
-             
+                var updatedPath = organizer.Organize(args.LocalFile.Path, args.Movie);
+
                 Log.InfoFormat("Match Saved: {0} ==> {1}", args.LocalFile.Path.Name, updatedPath);
             }
         }
@@ -172,7 +173,7 @@ namespace Grappachu.Movideo.Core
             return null;
         }
 
-   
+
 
         private static float GetMatch(Movie movie, AnalyzedItem item)
         {
@@ -273,6 +274,15 @@ namespace Grappachu.Movideo.Core
         {
             MatchFound?.Invoke(this, e);
         }
-        
+
+        private void OnProgressChanged(int current, int total)
+        {
+            if (total > 0)
+            {
+                var p = 100 * current / total;
+                ProgressChangedEventArgs e = new ProgressChangedEventArgs(p, null);
+                ProgressChanged?.Invoke(this, e);
+            }
+        }
     }
 }
