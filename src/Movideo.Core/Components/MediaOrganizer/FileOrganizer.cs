@@ -59,7 +59,6 @@ namespace Grappachu.Movideo.Core.Components.MediaOrganizer
             return !val.Contains("%");
         }
 
-
         private string GetRenamedPath(FileInfo item, Movie movie)
         {
             var fren = RenameTemplate;
@@ -102,10 +101,16 @@ namespace Grappachu.Movideo.Core.Components.MediaOrganizer
             var path = Path.GetDirectoryName(fullPath) ?? string.Empty;
             var newFullPath = fullPath;
 
+            var dupes = false;
             while (File.Exists(newFullPath))
             {
+                dupes = true;
                 var tempFileName = string.Format("{0}({1})", fileNameOnly, count++);
                 newFullPath = Path.Combine(path, tempFileName + extension);
+            }
+            if (dupes)
+            {
+                Log.WarnFormat("Seems path {0} contains some duplicated movies", path);
             }
             return newFullPath;
         }

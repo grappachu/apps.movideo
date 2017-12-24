@@ -6,5 +6,6 @@
         public string TargetPath { get; set; }
 
         public string RenameTemplate { get; set; }
+        public bool DeleteEmptyFolders { get; set; }
     }
 }

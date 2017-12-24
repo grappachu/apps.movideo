@@ -64,7 +64,8 @@ namespace Grappachu.Apps.Movideo
             {
                 Reorganize = ChkRename.IsChecked.GetValueOrDefault(),
                 TargetPath = TxtTarget.SelectedValue,
-                RenameTemplate = TxtRenameTemplate.Text
+                RenameTemplate = TxtRenameTemplate.Text,
+                DeleteEmptyFolders = Settings.Default.RemoveEmtyFolders
             };
 
             try
@@ -74,8 +75,10 @@ namespace Grappachu.Apps.Movideo
                 Settings.Default.LastRenameTemplate = TxtRenameTemplate.Text;
                 Settings.Default.Save();
 
-              _movideo.ScanAsync(settings)
-                    .ContinueWith(t => { ScanCompleted(settings); }); 
+                PrgBar.Value = 0;
+                PrgBar.Visibility = Visibility.Visible;
+                _movideo.ScanAsync(settings)
+                      .ContinueWith(t => { ScanCompleted(settings); });
             }
             catch (Exception ex)
             {
@@ -85,7 +88,11 @@ namespace Grappachu.Apps.Movideo
 
         private void ScanCompleted(MovideoSettings settings)
         {
-            Dialogs.ShowInfo("Ricerca Completata");
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                PrgBar.Value = 0;
+                PrgBar.Visibility = Visibility.Hidden;
+            }));
         }
 
         private void ToggleButton_OnChecked(object sender, RoutedEventArgs e)
@@ -106,7 +113,7 @@ namespace Grappachu.Apps.Movideo
 
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            TxtRenameTemplate.Text = !string.IsNullOrWhiteSpace(Settings.Default.LastRenameTemplate) 
+            TxtRenameTemplate.Text = !string.IsNullOrWhiteSpace(Settings.Default.LastRenameTemplate)
                 ? Settings.Default.LastRenameTemplate
                 : FileOrganizer.DefaultTemplate;
 
@@ -114,6 +121,12 @@ namespace Grappachu.Apps.Movideo
                 TxtFile.SelectedValue = Settings.Default.LastSourceFolder;
             if (Directory.Exists(Settings.Default.LastOutputFolder))
                 TxtTarget.SelectedValue = Settings.Default.LastOutputFolder;
+        }
+
+        private void BtnScanSettings_OnClick(object sender, RoutedEventArgs e)
+        {
+            var dlg = new ScanSettingsDialog();
+            dlg.ShowDialog();
         }
     }
 }
