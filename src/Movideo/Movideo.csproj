@@ -164,8 +164,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AppFactory.cs" />
     <Compile Include="ConfigReader.cs" />
     <Compile Include="Config\AutoMapperConfigurator.cs" />
+    <Compile Include="UI\Views\CatalogList2.xaml.cs">
+      <DependentUpon>CatalogList2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Views\CatalogList.xaml.cs">
+      <DependentUpon>CatalogList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Dialogs\ApiKeyDialog.xaml.cs">
       <DependentUpon>ApiKeyDialog.xaml</DependentUpon>
     </Compile>
@@ -175,6 +182,18 @@
     <Compile Include="UI\Dialogs\ScanSettingsDialog.xaml.cs">
       <DependentUpon>ScanSettingsDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Views\NavBar.xaml.cs">
+      <DependentUpon>NavBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Views\OrganizeControl.xaml.cs">
+      <DependentUpon>OrganizeControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\OrganizeControlPresenter.cs" />
+    <Compile Include="ViewModels\CatalogPresenter.cs" />
+    <Compile Include="ViewModels\NavBarPresenter.cs" />
+    <Compile Include="Common\ObservableObject.cs" />
+    <Compile Include="ViewModels\Commands\OpenSettings.cs" />
+    <Compile Include="Common\RelayCommand.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -187,6 +206,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UI\Views\CatalogList2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Views\CatalogList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\Dialogs\ApiKeyDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -196,6 +223,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\Dialogs\ScanSettingsDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Views\NavBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Views\OrganizeControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Grappachu.Apps.Movideo.UI.Dialogs"
         mc:Ignorable="d"
-        Title="Scan Settings" Height="300" Width="300" Loaded="ScanSettingsDialog_OnLoaded">
+        Title="Scan Settings" Height="480" Width="640" Loaded="ScanSettingsDialog_OnLoaded" WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="208*"/>

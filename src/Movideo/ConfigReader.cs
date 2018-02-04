@@ -55,14 +55,9 @@ namespace Grappachu.Apps.Movideo
         {
             while (!Directory.Exists(dir))
             {
-                if (string.IsNullOrEmpty(dir))
-                {
-                    dir = defaultPath;
-                }
-                else
-                {
-                    dir = Directory.GetParent(dir).FullName;
-                }
+                dir = string.IsNullOrEmpty(dir)
+                    ? defaultPath
+                    : Directory.GetParent(dir)?.FullName;
             }
             return dir;
         }

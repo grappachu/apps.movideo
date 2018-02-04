@@ -6,15 +6,12 @@ namespace Grappachu.Movideo.Core.Components.MediaScanner
 {
     public class BasicFileScanner : IFileScanner
     {
-        public string Path { get; set; }
-
-
-        public IEnumerable<FileInfo> Scan()
+        public IEnumerable<FileInfo> Scan(string path)
         {
-            string str = Path; 
+            var str = path;
 
             if (File.Exists(str))
-                return new[] { new FileInfo(str) };
+                return new[] {new FileInfo(str)};
             if (Directory.Exists(str))
             {
                 var ff = Directory.GetFiles(str, "*.mkv", SearchOption.AllDirectories)

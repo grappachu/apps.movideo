@@ -1,4 +1,4 @@
-using System.Data.Entity.Migrations;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Grappachu.Core.Lang.Extensions;
@@ -88,6 +88,13 @@ namespace Grappachu.Movideo.Data.LocalDb
             return movie;
         }
 
+        public IEnumerable<Movie> GetMovies()
+        {
+            return _ctx.TmdbMovies.Select(Mapper.Map<Movie>).ToArray();
+        }
+
+
+
         public void Push(Movie movie)
         {
             TmdbMovie dbMovie = Mapper.Instance.Map<TmdbMovie>(movie);
@@ -153,6 +160,7 @@ namespace Grappachu.Movideo.Data.LocalDb
             _ctx.SaveChanges();
         }
 
+      
         private static string GetKey(FileRef fref)
         {
             return MD5.HashString(fref.Path).ToString(BinaryRepresentation.Hex);

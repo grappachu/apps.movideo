@@ -22,15 +22,17 @@ namespace Grappachu.Movideo.Core
         private readonly IFileAnalyzer _analyzer;
         private readonly TMDbClient _apiClient;
         private readonly IMovieDb _db;
+        private readonly IConfigReader _configReader;
         private readonly IFileScanner _fileScanner;
 
         public MovideoApp(IConfigReader configReader, IFileScanner fileScanner, IFileAnalyzer analyzer, IMovieDb db)
         {
+            _configReader = configReader;
             _fileScanner = fileScanner;
             _analyzer = analyzer;
             _db = db;
 
-            ApiSettings apiSettings = configReader.GetApiSettings();
+            ApiSettings apiSettings = _configReader.GetApiSettings();
             if (apiSettings == null)
             {
                 throw new ArgumentNullException("Impossibile proseguire. API non configurata.");
@@ -45,6 +47,15 @@ namespace Grappachu.Movideo.Core
         public event EventHandler<MatchFoundEventArgs> MatchFound;
         public event ProgressChangedEventHandler ProgressChanged;
 
+        public JobSettings CurrentJob
+        {
+            get
+            {
+                 var jobSettings = _configReader.GetJobSettings();
+                return jobSettings;
+            }
+        }
+
         public Task<int> ScanAsync(MovideoSettings settings)
         {
             var tf = new TaskFactory<int>();
@@ -55,8 +66,8 @@ namespace Grappachu.Movideo.Core
         {
             var count = 0;
             var index = 0;
-
-            var files = _fileScanner.Scan().ToArray();
+            
+            var files = _fileScanner.Scan(settings.SourcePath).ToArray();
             var totalItems = files.Length;
 
 
@@ -283,6 +294,11 @@ namespace Grappachu.Movideo.Core
                 ProgressChangedEventArgs e = new ProgressChangedEventArgs(p, null);
                 ProgressChanged?.Invoke(this, e);
             }
+        }
+
+        public IEnumerable<Models.Movie> GetCatalog()
+        {
+           return _db.GetMovies();
         }
     }
 }

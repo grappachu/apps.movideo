@@ -37,7 +37,7 @@ namespace Grappachu.Movideo.Core.Test
         [Fact]
         public void App_flow_Test()
         {
-            _fileScannerMock.Setup(x => x.Scan()).Returns(new[]
+            _fileScannerMock.Setup(x => x.Scan(It.IsAny<string>())).Returns(new[]
             {
                 new FileInfo("Z:\\_IMPORTED\\_Movies\\Il primo dei bugiardi (2009) [Mux by Little-Boy].mkv"),
                 new FileInfo("Z:\\_IMPORTED\\_Movies\\The Raven (2012) BDRip 720p x265 Ita Eng Ac3 Sub ManoNera.mkv"),

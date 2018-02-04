@@ -1,5 +1,5 @@
-﻿using Grappachu.Movideo.Core.Components.MediaAnalyzer;
-using Grappachu.Movideo.Core.Utils;
+﻿using System.Collections.Generic;
+using Grappachu.Movideo.Core.Components.MediaAnalyzer;
 using Movie = Grappachu.Movideo.Core.Models.Movie;
 
 namespace Grappachu.Movideo.Core.Interfaces
@@ -14,5 +14,6 @@ namespace Grappachu.Movideo.Core.Interfaces
         void Push(FileRef fref, string hash);
         void Push(Movie movieTaskResult);
         void Push(string hash, int movieId);
+        IEnumerable<Movie> GetMovies();
     }
 }
