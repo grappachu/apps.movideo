@@ -11,6 +11,7 @@ using Grappachu.Movideo.Core.Components.MediaScanner;
 using Grappachu.Movideo.Core.Interfaces;
 using Grappachu.Movideo.Core.Models;
 using Grappachu.Movideo.Data.LocalDb;
+using log4net;
 using log4net.Core;
 
 namespace Grappachu.Apps.Movideo
@@ -20,6 +21,7 @@ namespace Grappachu.Apps.Movideo
     /// </summary>
     public partial class MainWindow : Window
     {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(MainWindow));
         private readonly FileAnalyzer _analyzer;
         private readonly IConfigReader _configReader;
         private readonly MovideoApp _movideo;
@@ -76,7 +78,15 @@ namespace Grappachu.Apps.Movideo
                 PrgBar.Value = 0;
                 PrgBar.Visibility = Visibility.Visible;
                 _movideo.ScanAsync(settings)
-                      .ContinueWith(t => { ScanCompleted(settings); });
+
+                      .ContinueWith(t =>
+                    {
+                        if (t.Exception != null)
+                        {
+                            Log.Error(t.Exception.Message, t.Exception);
+                        }
+                        ScanCompleted(settings);
+                    });
             }
             catch (Exception ex)
             {

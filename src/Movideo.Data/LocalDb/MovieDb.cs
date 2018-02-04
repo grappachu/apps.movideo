@@ -1,3 +1,4 @@
+using System.Data.Entity.Migrations;
 using System.Linq;
 using AutoMapper;
 using Grappachu.Core.Lang.Extensions;
@@ -84,21 +85,57 @@ namespace Grappachu.Movideo.Data.LocalDb
 
             var movie = Mapper.Instance.Map<Movie>(dbMovie);
 
-           return movie;
+            return movie;
         }
 
         public void Push(Movie movie)
         {
             TmdbMovie dbMovie = Mapper.Instance.Map<TmdbMovie>(movie);
 
-            var mov = _ctx.TmdbMovies.SingleOrDefault(x => x.Id == dbMovie.Id);
+            var mov = _ctx.TmdbMovies
+               // .Include(nameof(TmdbMovie.Genres))
+                .SingleOrDefault(x => x.Id == dbMovie.Id);
+
+
             if (mov != null)
             {
-                _ctx.TmdbMovies.Remove(mov);
-                _ctx.SaveChanges();
-            }
+                // Update Values
+                //   Mapper.Instance.Map(dbMovie, mov);  
+                mov.Adult = dbMovie.Adult;
+                mov.Collection = dbMovie.Collection;
+                mov.ImageUri = dbMovie.ImageUri;
+               
+                mov.ImdbId = mov.ImdbId;
+                mov.Duration = mov.Duration;
+                mov.OriginalLanguage = dbMovie.OriginalLanguage;
+                mov.OriginalTitle = dbMovie.OriginalTitle;
+                mov.Overview = dbMovie.Overview;
+                mov.Popularity = dbMovie.Popularity;
+                mov.PosterPath = dbMovie.PosterPath;
+                mov.ReleaseDate = dbMovie.ReleaseDate;
+                mov.Title = dbMovie.Title;
+                mov.VoteAverage = dbMovie.VoteAverage;
+                mov.VoteCount = dbMovie.VoteCount;
 
-            _ctx.TmdbMovies.Add(dbMovie);
+                ////  mov.Genres
+                //foreach (var dbMovieGenre in dbMovie.Genres)
+                //{
+                //    var origGenre = mov.Genres.SingleOrDefault(x => x.Id == dbMovieGenre.Id);
+                //    if (origGenre != null)
+                //    {
+                //        origGenre.Name = dbMovieGenre.Name;
+                //    }
+                //    else
+                //    {
+                      
+                //    }   
+                //}
+
+            }
+            else
+            {
+                _ctx.TmdbMovies.Add(dbMovie);
+            }
             _ctx.SaveChanges();
             movie.Id = dbMovie.Id;
         }
