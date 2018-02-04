@@ -15,15 +15,15 @@ namespace Grappachu.Movideo.Core.Components.MediaOrganizer
         internal FileOrganizer(string destinationFolder, string renameTemplate)
         {
             DestinationFolder = destinationFolder;
-            _renameTemplate = renameTemplate;
+            RenameTemplate = renameTemplate;
         }
 
-        public string DestinationFolder { get; }
+        private string DestinationFolder { get; }
 
-        public string RenameTemplate
+        private string RenameTemplate
         {
             get { return _renameTemplate; }
-            private set
+            set
             {
                 if (!IsTemplateValid(value))
                     throw new ArgumentException("Rename Template is invalid");
@@ -65,7 +65,7 @@ namespace Grappachu.Movideo.Core.Components.MediaOrganizer
             fren = fren.Replace(Tokens.Title, movie.Title);
             fren = fren.Replace(Tokens.Year, movie.Year?.ToString() ?? string.Empty);
             fren = fren.Replace(Tokens.Collection, movie.Collection);
-            fren = fren.Replace(Tokens.Extension, item.Extension);
+            fren = fren.Replace(Tokens.Extension, item.Extension.TrimStart('.'));
             fren = fren.Replace(Tokens.Genre, movie.Genres.FirstOrDefault()?.Name);
             fren = fren.Replace(Tokens.AllGenres, string.Join(",", movie.Genres.Select(x => x.Name)));
 

@@ -70,6 +70,7 @@
     <Compile Include="Components\MediaOrganizer\FileOrganizer.cs" />
     <Compile Include="Components\MediaOrganizer\IFileOrganizer.cs" />
     <Compile Include="Components\MediaScanner\BasicFileScanner.cs" />
+    <Compile Include="Interfaces\JobSettings.cs" />
     <Compile Include="Models\MediaBinding.cs" />
     <Compile Include="Models\MovieGenere.cs" />
     <Compile Include="Components\MediaAnalyzer\AnalyzedItem.cs" />

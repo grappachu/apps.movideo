@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using Grappachu.Apps.Movideo.Properties;
@@ -8,7 +7,6 @@ using Grappachu.Core.Preview.Runtime.Threading;
 using Grappachu.Core.Preview.UI;
 using Grappachu.Movideo.Core;
 using Grappachu.Movideo.Core.Components.MediaAnalyzer;
-using Grappachu.Movideo.Core.Components.MediaOrganizer;
 using Grappachu.Movideo.Core.Components.MediaScanner;
 using Grappachu.Movideo.Core.Interfaces;
 using Grappachu.Movideo.Core.Models;
@@ -113,14 +111,10 @@ namespace Grappachu.Apps.Movideo
 
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            TxtRenameTemplate.Text = !string.IsNullOrWhiteSpace(Settings.Default.LastRenameTemplate)
-                ? Settings.Default.LastRenameTemplate
-                : FileOrganizer.DefaultTemplate;
-
-            if (Directory.Exists(Settings.Default.LastSourceFolder))
-                TxtFile.SelectedValue = Settings.Default.LastSourceFolder;
-            if (Directory.Exists(Settings.Default.LastOutputFolder))
-                TxtTarget.SelectedValue = Settings.Default.LastOutputFolder;
+            var jobSettings = _configReader.GetJobSettings();
+            TxtFile.SelectedValue = jobSettings.SourceFolder;
+            TxtTarget.SelectedValue = jobSettings.OutputFolder;
+            TxtRenameTemplate.Text = jobSettings.RenameTemplate;
         }
 
         private void BtnScanSettings_OnClick(object sender, RoutedEventArgs e)
