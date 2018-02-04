@@ -11,11 +11,13 @@ namespace Grappachu.Movideo.Core.Components.MediaOrganizer
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(FileOrganizer));
         private string _renameTemplate;
+        private readonly IFolderCleaner _cleaner;
 
-        internal FileOrganizer(string destinationFolder, string renameTemplate)
+        internal FileOrganizer(string destinationFolder, string renameTemplate, IFolderCleaner cleaner)
         {
             DestinationFolder = destinationFolder;
-            RenameTemplate = renameTemplate;
+            _renameTemplate = renameTemplate;
+            _cleaner = cleaner;
         }
 
         private string DestinationFolder { get; }
@@ -44,8 +46,15 @@ namespace Grappachu.Movideo.Core.Components.MediaOrganizer
             FilesystemTools.SafeCreateDirectory(Path.GetDirectoryName(targetPath));
 
             File.Move(itemFile.FullName, targetPath);
+            Log.InfoFormat("Match Saved: {0} ==> {1}", itemFile.Name, targetPath);
+
+            if (_cleaner != null)
+            {
+                _cleaner.Clean(itemFile.Directory);
+            }
 
             return targetPath;
+
         }
 
         private static bool IsTemplateValid(string value)

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Grappachu.Core.Collections;
 using Grappachu.Core.Lang.Text;
 using Grappachu.Movideo.Core.Components.MediaAnalyzer;
 using Grappachu.Movideo.Core.Components.MediaOrganizer;
@@ -113,25 +112,9 @@ namespace Grappachu.Movideo.Core
             if (settings.Reorganize)
             {
                 var sourcePath = args.LocalFile.Path;
-                var organizer = new FileOrganizer(settings.TargetPath, settings.RenameTemplate);
-                var updatedPath = organizer.Organize(sourcePath, args.Movie);
-
-                Log.InfoFormat("Match Saved: {0} ==> {1}", sourcePath.Name, updatedPath);
-
-                if (settings.DeleteEmptyFolders)
-                {
-                    var sourceDir = sourcePath.Directory;
-                    if (sourceDir != null && sourceDir.GetFiles().IsNullOrEmpty())
-                    {
-                        var files = sourceDir.GetFiles();
-                        if (!files.Any())
-                        {
-                            var dir = sourceDir.FullName;
-                            sourceDir.Delete();
-                            Log.DebugFormat("Directory Removed: {0}", dir);
-                        }
-                    }
-                }
+                IFolderCleaner cleaner = settings.DeleteEmptyFolders ? new FolderCleaner() : null;
+                var organizer = new FileOrganizer(settings.TargetPath, settings.RenameTemplate, cleaner);
+                organizer.Organize(sourcePath, args.Movie);
             }
         }
 

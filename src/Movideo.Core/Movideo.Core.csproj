@@ -67,7 +67,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiSettings.cs" />
+    <Compile Include="Components\MediaOrganizer\DirectoryCleaner.cs" />
+    <Compile Include="Utils\DirectoryUtils.cs" />
     <Compile Include="Components\MediaOrganizer\FileOrganizer.cs" />
+    <Compile Include="Components\MediaOrganizer\FolderCleaner.cs" />
     <Compile Include="Components\MediaOrganizer\IFileOrganizer.cs" />
     <Compile Include="Components\MediaScanner\BasicFileScanner.cs" />
     <Compile Include="Interfaces\JobSettings.cs" />

@@ -79,6 +79,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DirectoryInfoUtilsTest.cs" />
+    <Compile Include="DirectoryCleanerTest.cs" />
     <Compile Include="MovideoAppTest.cs" />
     <Compile Include="TitleCleanerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
