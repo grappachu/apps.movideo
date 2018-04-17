@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace Grappachu.Movideo.Core.Components.MediaScanner
 {
+    /// <summary>
+    ///     Rappresenta un componente per la ricerca di file multimediali sul disco
+    /// </summary>
     public class BasicFileScanner : IFileScanner
     {
         public IEnumerable<FileInfo> Scan(string path)

@@ -16,8 +16,8 @@ namespace Grappachu.Movideo.Core.Models
 
         public bool Adult { get; set; }
 
-         public string ImdbId { get; set; }
-        
+        public string ImdbId { get; set; }
+
         public string OriginalLanguage { get; set; }
 
         public string Overview { get; set; }
@@ -25,13 +25,13 @@ namespace Grappachu.Movideo.Core.Models
         public double VoteAverage { get; set; }
         public int VoteCount { get; set; }
 
-       public string PosterPath { get; set; }
+        public string PosterPath { get; set; }
 
         public IEnumerable<MovieGenere> Genres { get; set; }
         public DateTime? ReleaseDate { get; set; }
 
         public string Collection { get; set; }
 
-       public string ImageUri { get; set; }
+        public string ImageUri { get; set; }
     }
 }

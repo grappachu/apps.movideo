@@ -6,6 +6,5 @@ namespace Grappachu.Movideo.Core.Components.MediaScanner
     public interface IFileScanner
     {
         IEnumerable<FileInfo> Scan(string sourcePath);
-        
     }
 }

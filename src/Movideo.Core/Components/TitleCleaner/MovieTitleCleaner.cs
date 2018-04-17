@@ -26,7 +26,7 @@ namespace Grappachu.Movideo.Core.Components.TitleCleaner
             Languages = l.Distinct().ToArray();
 
 
-            SpaceChars = new[] {".", "_", " "};
+            SpaceChars = new[] { ".", "_", " " };
         }
 
 
@@ -110,7 +110,7 @@ namespace Grappachu.Movideo.Core.Components.TitleCleaner
                 var dataGraph = str.GetBetween(openChar.ToString(), closeChar.ToString());
                 if (LooksLikeYear(dataGraph))
                 {
-                    maybeYear = int.Parse(dataGraph.Substring(0,4));
+                    maybeYear = int.Parse(dataGraph.Substring(0, 4));
                 }
                 else
                 {
@@ -129,7 +129,7 @@ namespace Grappachu.Movideo.Core.Components.TitleCleaner
 
         private static bool LooksLikeYear(string dataRound)
         {
-            return Regex.IsMatch(dataRound, "^(19|20)[0-9][0-9]");
+            return Regex.IsMatch(dataRound, "^(19|20)[0-9][0-9]") && dataRound.Length == 4;
         }
     }
 }

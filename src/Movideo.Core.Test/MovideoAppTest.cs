@@ -2,6 +2,7 @@
 using System.IO;
 using Grappachu.Movideo.Core.Components.MediaAnalyzer;
 using Grappachu.Movideo.Core.Components.MediaScanner;
+using Grappachu.Movideo.Core.Components.Remoting.Interfaces;
 using Grappachu.Movideo.Core.Interfaces;
 using Moq;
 using SharpTestsEx;
@@ -22,10 +23,11 @@ namespace Grappachu.Movideo.Core.Test
                 ApiKey = "1234567890"
             });
 
-
             _analyzerMock = new Mock<IFileAnalyzer>();
+            _movieFinderMock = new Mock<IMovieFinder>();
 
-            _sut = new MovideoApp(_configMock.Object, _fileScannerMock.Object, _analyzerMock.Object, _dbMock.Object);
+            _sut = new MovideoApp(_configMock.Object, _fileScannerMock.Object, _analyzerMock.Object, _dbMock.Object,
+                _movieFinderMock.Object);
         }
 
         private readonly MovideoApp _sut;
@@ -33,6 +35,7 @@ namespace Grappachu.Movideo.Core.Test
         private readonly Mock<IMovieDb> _dbMock;
         private readonly Mock<IConfigReader> _configMock;
         private readonly Mock<IFileAnalyzer> _analyzerMock;
+        private readonly Mock<IMovieFinder> _movieFinderMock;
 
         [Fact]
         public void App_flow_Test()
@@ -44,9 +47,8 @@ namespace Grappachu.Movideo.Core.Test
                 new FileInfo("Z:\\_IMPORTED\\_Movies\\Fuck You, Prof! (2013) BDRip 720p HEVC ITA GER AC3 Multi Sub PirateMKV.mkv")
             });
             _analyzerMock.Setup(x => x.Analyze(It.IsAny<FileInfo>())).Returns(new AnalyzedItem(new FileInfo(".")));
-
-
-            var res =   _sut.ScanAsync(new MovideoSettings());
+            
+            var res = _sut.ScanAsync(new MovideoSettings());
             res.Wait();
 
             res.Result.Should().Be(3);
