@@ -44,10 +44,9 @@ namespace Grappachu.Apps.Movideo
             var fallbackPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             settings.SourceFolder = GetDirectoryOrDefault(Settings.Default.LastSourceFolder, fallbackPath);
             settings.OutputFolder = GetDirectoryOrDefault(Settings.Default.LastOutputFolder, fallbackPath);
-            settings.RenameTemplate = Settings.Default.LastRenameTemplate;
             settings.RenameTemplate = !string.IsNullOrWhiteSpace(Settings.Default.LastRenameTemplate)
-             ? Settings.Default.LastRenameTemplate
-             : FileOrganizer.DefaultTemplate;
+                        ? Settings.Default.LastRenameTemplate
+                        : FileOrganizer.DefaultTemplate;
             return settings;
         }
 

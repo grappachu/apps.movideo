@@ -7,6 +7,7 @@ using Grappachu.Apps.Movideo.UI.Dialogs;
 using Grappachu.Core.Preview.Runtime.Threading;
 using Grappachu.Core.Preview.UI;
 using Grappachu.Movideo.Core;
+using Grappachu.Movideo.Core.Components.MediaOrganizer;
 using Grappachu.Movideo.Core.Interfaces;
 using Grappachu.Movideo.Core.Models;
 using log4net;
@@ -41,6 +42,12 @@ namespace Grappachu.Apps.Movideo.ViewModels
                 RaisePropertyChangedEvent(nameof(ProgressBarValue));
             }
         }
+
+        public string UiRenameTooltip { get
+        {
+            return string.Format("I seguenti token sono supportati: \n\n {0}", string.Join(", ",
+                Tokens.List));
+        }}
 
         public Visibility ProgressBarVisibility
         {

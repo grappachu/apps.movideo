@@ -19,13 +19,12 @@ namespace Grappachu.Movideo.Data.LocalDb
         public MovieDb()
         {
             _ctx = new MovideoModel();
+            _ctx.TmdbMovies.Count();
         }
-
 
         public bool HasMatch(AnalyzedItem item)
         {
-            return _ctx.MediaBindings.Any(x => x.Hash == item.Hash && x.MovieId.HasValue);
-
+            return _ctx.MediaBindings.Any(x => x.Hash == item.Hash && x.MovieId.HasValue); 
         }
 
         public bool HasHash(FileRef fref)

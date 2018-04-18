@@ -36,20 +36,14 @@ namespace Grappachu.Movideo.Core
             {
                 throw new ArgumentNullException("Impossibile proseguire. API non configurata.");
             }
-          
+
+            CurrentJob = _configReader.GetJobSettings();
         }
 
         public event EventHandler<MatchFoundEventArgs> MatchFound;
         public event ProgressChangedEventHandler ProgressChanged;
 
-        public JobSettings CurrentJob
-        {
-            get
-            {
-                var jobSettings = _configReader.GetJobSettings();
-                return jobSettings;
-            }
-        }
+        public JobSettings CurrentJob { get; }
 
         public Task<int> ScanAsync(MovideoSettings settings)
         {
@@ -71,9 +65,9 @@ namespace Grappachu.Movideo.Core
                 OnProgressChanged(index, totalItems);
 
                 var item = _analyzer.Analyze(file);
+                float accuracy;
                 if (!item.IsKnown)
                 {
-                    float accuracy;
                     var res = TryIdentify(item, out accuracy);
                     if (res != null)
                     {
@@ -87,17 +81,17 @@ namespace Grappachu.Movideo.Core
 
                         if (args.IsMatch == true)
                         {
+                            _db.Push(item.Hash, args.Movie.Id);
+
                             DoRename(args, settings);
 
                             UpdateItem(item, res);
                             count++;
                         }
-
                     }
                 }
                 else
                 {
-                    float accuracy;
                     var movieId = _db.GetMovieIdFor(item);
                     var movie = _db.GetMovie(movieId.Value);
                     item.Title = movie.Title;
@@ -136,7 +130,6 @@ namespace Grappachu.Movideo.Core
 
             var movie = candidate.Movie;
             _db.Push(movie);
-            _db.Push(item.Hash, movie.Id);
 
             return movie;
         }
@@ -160,7 +153,7 @@ namespace Grappachu.Movideo.Core
             }
         }
 
-        public IEnumerable<Models.Movie> GetCatalog()
+        public IEnumerable<Movie> GetCatalog()
         {
             return _db.GetMovies();
         }

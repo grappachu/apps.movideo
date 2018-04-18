@@ -59,10 +59,9 @@ namespace Grappachu.Movideo.Core.Components.MediaOrganizer
 
         private static bool IsTemplateValid(string value)
         {
-            var tokens = new[] { Tokens.Title, Tokens.Extension, Tokens.Year, Tokens.Collection, Tokens.Genre };
             var val = value;
 
-            foreach (var token in tokens)
+            foreach (var token in Tokens.List)
                 val = val.Replace(token, string.Empty);
 
             return !val.Contains("%");
@@ -123,15 +122,17 @@ namespace Grappachu.Movideo.Core.Components.MediaOrganizer
             }
             return newFullPath;
         }
+    }
 
-        public static class Tokens
-        {
-            public const string Title = "%title%";
-            public const string Year = "%year%";
-            public const string Extension = "%ext%";
-            public const string Collection = "%collection%";
-            public const string Genre = "%firstgenre%";
-            public const string AllGenres = "%allgenres%";
-        }
+    public static class Tokens
+    {
+        public const string Title = "%title%";
+        public const string Year = "%year%";
+        public const string Extension = "%ext%";
+        public const string Collection = "%collection%";
+        public const string Genre = "%genre%";
+        public const string AllGenres = "%genres%";
+
+        public static readonly string[] List = { Title, Extension, Year, Collection, Genre, AllGenres };
     }
 }
