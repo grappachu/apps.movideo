@@ -18,8 +18,8 @@ namespace Grappachu.Movideo.Core.Components.Remoting
         private static readonly ILog Log = LogManager.GetLogger(typeof(MovieFinder));
         private static float _titlePound = 1f;
         private static float _origTitlePound = 1f;
-        private static float _yearPound= 1f;
-        private static float _lengthPound= 1f;
+        private static float _yearPound = 1f;
+        private static float _lengthPound = 1f;
 
         public MovieFinder(ITmdbClientFactory apiClientFactory)
         {
@@ -55,23 +55,29 @@ namespace Grappachu.Movideo.Core.Components.Remoting
                 }
             }
 
-            var resChart = matches
-                .Select(x => new MovieMatch { Movie = MapDbItem(x), MatchAccuracy = GetMatch(x, item) })
-                .OrderByDescending(z => z.MatchAccuracy).ToArray();
+            if (matches.Any())
+            { 
+                var maxPop = matches.Max(x => x.Popularity);
+                var resChart = matches
+                    .Select(x => new MovieMatch { Movie = MapDbItem(x), MatchAccuracy = GetMatch(x, item, maxPop) })
+                    .OrderByDescending(z => z.MatchAccuracy).ToArray();
 
-            var candidate = resChart.FirstOrDefault(x => x.MatchAccuracy >= 0.2f);
+                var candidate = resChart.FirstOrDefault(x => x.MatchAccuracy >= 0.2f);
 
-            if (candidate != null)
-            {
-                apiClient.GetConfig();
-                candidate.Movie.ImageUri = apiClient.GetImageUrl("w185", candidate.Movie.PosterPath).ToString();
+                if (candidate != null)
+                {
+                    apiClient.GetConfig();
+                    candidate.Movie.ImageUri = apiClient.GetImageUrl("w185", candidate.Movie.PosterPath).ToString();
+                }
+
+                return candidate;
             }
 
-            return candidate;
+            return null;
         }
 
 
-        public static float GetMatch(Movie movie, AnalyzedItem item)
+        public static float GetMatch(Movie movie, AnalyzedItem item, double maxPop)
         {
             float res = 0;
             int parts = 0;
@@ -96,6 +102,11 @@ namespace Grappachu.Movideo.Core.Components.Remoting
                 res += yearMatch.Value * _yearPound;
                 parts++;
             }
+            else
+            {
+                res += 0.5f;
+                parts++;
+            }
 
             var lengthMatch = MatchLength(item, movie);
             if (lengthMatch.HasValue)
@@ -103,12 +114,21 @@ namespace Grappachu.Movideo.Core.Components.Remoting
                 res += lengthMatch.Value * _lengthPound;
                 parts++;
             }
+            else
+            {
+                res += 0.2f;
+                parts++;
+            }
+
+
+            res += (float)movie.Popularity / (float)maxPop;
+            parts++;
 
             var score = res / parts;
-            return score; 
+            return score;
         }
 
-      
+
 
 
         private static float? MatchTitle(AnalyzedItem item, Movie movie)
@@ -141,9 +161,9 @@ namespace Grappachu.Movideo.Core.Components.Remoting
 
             return null;
         }
-         
+
         private static float? MatchYear(AnalyzedItem item, Movie movie)
-        { 
+        {
             const int k = 10;
             if (item.Year.HasValue && movie.ReleaseDate.HasValue)
             {
@@ -163,7 +183,7 @@ namespace Grappachu.Movideo.Core.Components.Remoting
                 var mtime = TimeSpan.FromMinutes(movie.Runtime.Value);
                 var diff = Math.Abs(item.Duration.Subtract(mtime).TotalMinutes);
 
-                var square =  k - (float)Math.Min(diff, k);
+                var square = k - (float)Math.Min(diff, k);
                 float perc = square / k;
 
                 return perc;

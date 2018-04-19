@@ -81,6 +81,7 @@ namespace Grappachu.Movideo.Core
 
                         if (args.IsMatch == true)
                         {
+                            _db.Push(args.Movie);
                             _db.Push(item.Hash, args.Movie.Id);
 
                             DoRename(args, settings);
@@ -128,8 +129,7 @@ namespace Grappachu.Movideo.Core
 
             matchAccuracy = candidate.MatchAccuracy;
 
-            var movie = candidate.Movie;
-            _db.Push(movie);
+            var movie = candidate.Movie; 
 
             return movie;
         }

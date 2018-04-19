@@ -24,7 +24,7 @@ namespace Grappachu.Movideo.Data.LocalDb
 
         public bool HasMatch(AnalyzedItem item)
         {
-            return _ctx.MediaBindings.Any(x => x.Hash == item.Hash && x.MovieId.HasValue); 
+            return _ctx.MediaBindings.Any(x => x.Hash == item.Hash && x.MovieId.HasValue);
         }
 
         public bool HasHash(FileRef fref)
@@ -52,6 +52,7 @@ namespace Grappachu.Movideo.Data.LocalDb
 
         public void Push(FileRef fref, string hash)
         {
+            //Verific l'esistenza di un binding
             var bind = _ctx.MediaBindings.SingleOrDefault(x => x.Hash == hash);
             if (bind == null)
             {
@@ -60,6 +61,7 @@ namespace Grappachu.Movideo.Data.LocalDb
                 _ctx.MediaBindings.Add(bind);
             }
 
+            // Verifica l'esistenda di un file
             var key = GetKey(fref);
             var file = _ctx.MediaFiles.SingleOrDefault(x => x.Key == key);
             if (file == null)
@@ -69,6 +71,7 @@ namespace Grappachu.Movideo.Data.LocalDb
                 _ctx.MediaFiles.Add(file);
             }
 
+            // Aggiorna il file
             file.Path = fref.Path;
             file.Bytes = fref.Bytes;
             file.Hash = hash;
@@ -89,7 +92,13 @@ namespace Grappachu.Movideo.Data.LocalDb
 
         public IEnumerable<Movie> GetMovies()
         {
-            return _ctx.TmdbMovies.Select(Mapper.Map<Movie>).ToArray();
+            return _ctx.MediaBindings
+                .Include(nameof(MediaBinding.Movie))
+                .Where(mb => mb.Movie != null)
+                .Select(mb => mb.Movie)
+                .ToArray()
+                .Select(Mapper.Map<Movie>)
+                .ToArray();
         }
 
 
@@ -99,9 +108,8 @@ namespace Grappachu.Movideo.Data.LocalDb
             TmdbMovie dbMovie = Mapper.Instance.Map<TmdbMovie>(movie);
 
             var mov = _ctx.TmdbMovies
-               // .Include(nameof(TmdbMovie.Genres))
-                .SingleOrDefault(x => x.Id == dbMovie.Id);
-
+                // .Include(nameof(TmdbMovie.Genres))
+                .SingleOrDefault(x => x.ImdbId == dbMovie.ImdbId); 
 
             if (mov != null)
             {
@@ -110,7 +118,7 @@ namespace Grappachu.Movideo.Data.LocalDb
                 mov.Adult = dbMovie.Adult;
                 mov.Collection = dbMovie.Collection;
                 mov.ImageUri = dbMovie.ImageUri;
-               
+
                 mov.ImdbId = mov.ImdbId;
                 mov.Duration = mov.Duration;
                 mov.OriginalLanguage = dbMovie.OriginalLanguage;
@@ -133,17 +141,20 @@ namespace Grappachu.Movideo.Data.LocalDb
                 //    }
                 //    else
                 //    {
-                      
+
                 //    }   
                 //}
-
+                
+                movie.Id = mov.Id;
+                _ctx.SaveChanges(); 
             }
             else
             {
                 _ctx.TmdbMovies.Add(dbMovie);
+                _ctx.SaveChanges();
+                movie.Id = dbMovie.Id;
             }
-            _ctx.SaveChanges();
-            movie.Id = dbMovie.Id;
+
         }
 
         public void Push(string hash, int movieId)
@@ -159,7 +170,7 @@ namespace Grappachu.Movideo.Data.LocalDb
             _ctx.SaveChanges();
         }
 
-      
+
         private static string GetKey(FileRef fref)
         {
             return MD5.HashString(fref.Path).ToString(BinaryRepresentation.Hex);

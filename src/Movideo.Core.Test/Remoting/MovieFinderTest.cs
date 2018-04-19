@@ -70,10 +70,10 @@ namespace Grappachu.Movideo.Core.Test.Remoting
                 Title = "The Matrix Reloaded",
                 SubTitle = "",
                 Duration = TimeSpan.FromMinutes(138),
-                Year = 2003
+                Year = 2003 
             };
 
-            var res = MovieFinder.GetMatch(movie, item);
+            var res = MovieFinder.GetMatch(movie, item, 21.950722);
 
             res.Should().Be.IncludedIn(0.999, 1);
         }
@@ -98,7 +98,7 @@ namespace Grappachu.Movideo.Core.Test.Remoting
                 Year = 2003
             };
 
-            var res = MovieFinder.GetMatch(movie, item);
+            var res = MovieFinder.GetMatch(movie, item, 11.950722);
 
             res.Should().Be.IncludedIn(0.0, 0.1);
         }
