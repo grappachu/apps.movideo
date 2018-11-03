@@ -1,0 +1,81 @@
+﻿<UserControl x:Class="Grappachu.Apps.Movideo.UI.Views.OrganizeControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"  
+             xmlns:viewModels="clr-namespace:Grappachu.Apps.Movideo.ViewModels"
+             xmlns:pathSelector="clr-namespace:Sysdata.UI.WPF.Controls.PathSelector;assembly=Sysdata.UI.WPF"
+             xmlns:controls="clr-namespace:Sysdata.UI.WPF.Controls;assembly=Sysdata.UI.WPF"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="600"  d:DataContext="{d:DesignInstance viewModels:OrganizeControlPresenter}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="160" />
+            <RowDefinition Height="47*" />
+        </Grid.RowDefinitions>
+        <Grid   Grid.Row="0"  >
+            <TextBlock Margin="43,19,0,0"
+                   TextAlignment="Right"
+                   Height="23"
+                   VerticalAlignment="Top"
+                   Grid.RowSpan="2" HorizontalAlignment="Left" Width="87" Grid.ColumnSpan="2"><Run Text="Cerca Film in:"/></TextBlock>
+            <pathSelector:PathSelector x:Name="TxtFile"
+                                   DirectoryMode="True"
+                                   BrowseButtonVisible="True"
+                                   BrowseButtonContent="..."
+                                   WatermarkText="(Sfoglia)"
+                                   Margin="135,15,121,0"
+                                   Height="27"
+                                   VerticalAlignment="Top"  
+                                   Width="Auto"/>
+            <CheckBox x:Name="ChkRename"
+                  Margin="135,47,218,0"
+                  Height="16"
+                  VerticalAlignment="Top" 
+                      IsChecked="{Binding Path=ReorganizeFiles, Mode = TwoWay}"
+                  Checked="ToggleButton_OnChecked"
+                  Unchecked="ToggleButton_OnUnchecked" Content="Rinomina e sposta i file trovati"/>
+
+            <TextBlock Margin="41,78,0,0"
+                   TextAlignment="Right"
+                   Height="23"
+                   VerticalAlignment="Top"
+                   HorizontalAlignment="Left" Width="87"><Run Text="Destinazione"/></TextBlock>
+            <pathSelector:PathSelector x:Name="TxtTarget"
+                                   DirectoryMode="True"
+                                   IsEnabled="False"
+                                   BrowseButtonVisible="True"
+                                   BrowseButtonContent="..."
+                                   WatermarkText="(Sfoglia)"
+                                   Margin="135,74,121,0"
+                                   Height="27"
+                                   VerticalAlignment="Top"
+                                   Width="Auto"/>
+
+            <Button x:Name="BtnFind"
+                Margin="0,0,10,9" 
+                Height="61"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Right"
+                Width="87" Content="Trova" Command="{Binding ScanCommand}"   />
+
+            <TextBlock Margin="41,106,0,0"
+                   TextAlignment="Right"
+                   Height="23"
+                   VerticalAlignment="Top"
+                   HorizontalAlignment="Left" Width="87" ><Run Text="Template"/></TextBlock>
+            <TextBox x:Name="TxtRenameTemplate" Text="{Binding Path=CurrentJob.RenameTemplate, Mode = TwoWay}"
+                 Margin="135,106,121,0"
+                 Height="23" VerticalAlignment="Top" ToolTip="{Binding Path=UiRenameTooltip, Mode = OneWay}"/>
+            <ProgressBar x:Name="PrgBar" Value="{Binding Path=ProgressBarValue, Mode = OneWay}"
+                         Visibility="{Binding Path=ProgressBarVisibility, Mode = OneWay}" 
+                         Margin="135,134,121,0" Grid.Row="0" Height="16" VerticalAlignment="Top"
+                         />
+
+        </Grid>
+        <controls:LogViewer x:Name="LogViewer"
+                            DisplayToolbar="False"
+                            Margin="0,13,0,0"
+                            Grid.Row="1" />
+    </Grid>
+</UserControl>

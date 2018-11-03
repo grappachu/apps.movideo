@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using Grappachu.Apps.Movideo.Properties;
 
-namespace Grappachu.Apps.Movideo.UI.Dialogs
+namespace Grappachu.Apps.Movideo.Views.Dialogs
 {
     /// <summary>
     ///     Logica di interazione per ScanSettingsDialog.xaml

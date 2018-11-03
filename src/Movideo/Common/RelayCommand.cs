@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Windows.Input;
 
-namespace Grappachu.Apps.Movideo.ViewModels
+namespace Grappachu.Apps.Movideo.Common
 {
     /// <summary>
     /// A command whose sole purpose is to relay its functionality to other
@@ -22,10 +22,7 @@ namespace Grappachu.Apps.Movideo.ViewModels
         /// <param name="canExecute">The execution status logic.</param>
         public RelayCommand(Action<object> execute, Predicate<object> canExecute = null)
         {
-            if (execute == null)
-                throw new ArgumentNullException(nameof(execute));
-
-            _execute = execute;
+            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
             _canExecute = canExecute;
         }
 
@@ -37,8 +34,8 @@ namespace Grappachu.Apps.Movideo.ViewModels
 
         public event EventHandler CanExecuteChanged
         {
-            add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested -= value; }
+            add => CommandManager.RequerySuggested += value;
+            remove => CommandManager.RequerySuggested -= value;
         }
 
         public void Execute(object parameters)

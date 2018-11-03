@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Grappachu.Apps.Movideo.UI.Views
+namespace Grappachu.Apps.Movideo.Views
 {
     /// <summary>
     /// Logica di interazione per NavBar.xaml

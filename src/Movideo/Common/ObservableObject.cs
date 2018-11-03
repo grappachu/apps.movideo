@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.Windows;
 
-namespace Grappachu.Apps.Movideo.ViewModels
+namespace Grappachu.Apps.Movideo.Common
 {
     public abstract class ObservableObject : DependencyObject, INotifyPropertyChanged
     {

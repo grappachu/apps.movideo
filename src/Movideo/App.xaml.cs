@@ -7,7 +7,7 @@ namespace Grappachu.Apps.Movideo
     /// <summary>
     ///     Logica di interazione per App.xaml
     /// </summary>
-    public partial class App : Application
+    public partial class App
     {
 
         public App()

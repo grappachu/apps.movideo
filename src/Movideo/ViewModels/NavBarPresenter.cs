@@ -1,5 +1,6 @@
 using System.Windows.Input;
-using Grappachu.Apps.Movideo.ViewModels.Commands;
+using Grappachu.Apps.Movideo.Common;
+using Grappachu.Apps.Movideo.Views.Dialogs;
 
 namespace Grappachu.Apps.Movideo.ViewModels
 {
@@ -8,6 +9,7 @@ namespace Grappachu.Apps.Movideo.ViewModels
         private NavBarAction _currentProduct;
         private ICommand _navigateCatalogCommand;
         private ICommand _navigateSearchCommand;
+        private ICommand _openSettingsCommand;
 
         public NavBarAction CurrentNavAction
         {
@@ -40,27 +42,38 @@ namespace Grappachu.Apps.Movideo.ViewModels
         {
             get
             {
-                if (_navigateSearchCommand == null)
-                    _navigateSearchCommand = new RelayCommand(
-                        param => GoToSearch(),
-                        param => CurrentNavAction != null && CurrentNavAction.Title != "Search"
-                    );
-                return _navigateSearchCommand;
+                return _navigateSearchCommand ?? (_navigateSearchCommand = new RelayCommand(
+                           param => GoToSearch(),
+                           param => CurrentNavAction != null && CurrentNavAction.Title != "Search"
+                       ));
             }
         }
 
-        public ICommand OpenSettingsCommand => OpenSettings.GetCommand();
+        public ICommand OpenSettingsCommand
+        {
+            get
+            {
+                return _openSettingsCommand ?? (_openSettingsCommand = new RelayCommand(
+                           param =>
+                           {
+                               var dlg = new ScanSettingsDialog();
+                               dlg.ShowDialog();
+                           },
+                           param => true
+                       ));
+            }
+        }
 
 
         private void GoToSearch()
         {
-            var p = new NavBarAction {Title = "Search"};
+            var p = new NavBarAction { Title = "Search" };
             CurrentNavAction = p;
         }
 
         private void GoToCatalog()
         {
-            var p = new NavBarAction {Title = "Catalog"};
+            var p = new NavBarAction { Title = "Catalog" };
             CurrentNavAction = p;
         }
     }

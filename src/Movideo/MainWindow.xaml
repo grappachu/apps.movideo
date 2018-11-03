@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:Grappachu.Apps.Movideo.ViewModels"
-    xmlns:views="clr-namespace:Grappachu.Apps.Movideo.UI.Views"
+    xmlns:views="clr-namespace:Grappachu.Apps.Movideo.Views"
     x:Class="Grappachu.Apps.Movideo.MainWindow"
         mc:Ignorable="d"
         Title="Movideo - Sistema Film"

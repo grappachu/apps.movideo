@@ -2,7 +2,7 @@
 using System.Windows;
 using Grappachu.Movideo.Core;
 
-namespace Grappachu.Apps.Movideo.UI.Dialogs
+namespace Grappachu.Apps.Movideo.Views.Dialogs
 {
     /// <summary>
     ///     Logica di interazione per ApiKeyDialog.xaml

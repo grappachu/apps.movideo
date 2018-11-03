@@ -1,11 +1,10 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Grappachu.Movideo.Core.Models;
 
-namespace Grappachu.Apps.Movideo.UI.Dialogs
+namespace Grappachu.Apps.Movideo.Views.Dialogs
 {
     /// <summary>
     ///     Logica di interazione per MatchDialog.xaml

@@ -12,10 +12,6 @@ namespace Grappachu.Movideo.Core.Utils
         {
             return !dir.GetFiles().Any() && !dir.GetDirectories().Any();
         }
-
-        public static bool IsEmpty(string directoryPath)
-        {
-            return new DirectoryInfo(directoryPath).IsEmpty();
-        }
+ 
     }
 }

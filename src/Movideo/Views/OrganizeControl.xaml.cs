@@ -4,7 +4,7 @@ using Grappachu.Apps.Movideo.Properties;
 using Grappachu.Apps.Movideo.ViewModels;
 using log4net.Core;
 
-namespace Grappachu.Apps.Movideo.UI.Views
+namespace Grappachu.Apps.Movideo.Views
 {
     /// <summary>
     ///     Logica di interazione per OrganizeControl.xaml

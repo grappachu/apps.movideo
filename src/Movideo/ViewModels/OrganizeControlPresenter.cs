@@ -2,8 +2,10 @@
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Grappachu.Apps.Movideo.Common;
+using Grappachu.Apps.Movideo.Config;
 using Grappachu.Apps.Movideo.Properties;
-using Grappachu.Apps.Movideo.UI.Dialogs;
+using Grappachu.Apps.Movideo.Views.Dialogs;
 using Grappachu.Core.Preview.Runtime.Threading;
 using Grappachu.Core.Preview.UI;
 using Grappachu.Movideo.Core;
