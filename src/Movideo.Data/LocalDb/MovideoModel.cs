@@ -10,14 +10,24 @@ namespace Grappachu.Movideo.Data.LocalDb
         {
         }
 
-        // Aggiungere DbSet per ogni tipo di entità che si desidera includere nel modello. Per ulteriori informazioni 
-        // sulla configurazione e sull'utilizzo di un modello Code, vedere http://go.microsoft.com/fwlink/?LinkId=390109.
-
         public virtual DbSet<DbMediaFile> MediaFiles { get; set; }
-
         public virtual DbSet<DbMediaBinding> MediaBindings { get; set; }
-
         public virtual DbSet<TmdbMovie> TmdbMovies { get; set; }
         public virtual DbSet<TmdbGenere> TmdbGeneres { get; set; }
+
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<TmdbMovie>()
+                .HasMany(s => s.Genres)
+                .WithMany(c => c.Movies)
+                .Map(cs =>
+                {
+                    cs.MapLeftKey("MovieId");
+                    cs.MapRightKey("GenereId");
+                    cs.ToTable("MovieGeneres");
+                });
+        }
+
     }
 }

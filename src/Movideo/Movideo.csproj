@@ -168,6 +168,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Common\FormattedStringConverter.cs" />
+    <Compile Include="Common\GenresToStringConverter.cs" />
+    <Compile Include="Common\ObjectToVisibilityConverter.cs" />
     <Compile Include="Config\AppFactory.cs" />
     <Compile Include="Config\ConfigReader.cs" />
     <Compile Include="Config\AutoMapperConfigurator.cs" />
@@ -300,9 +303,6 @@
     </Content>
     <Resource Include="Ekisho Deep Ocean Movies.ico" />
     <Resource Include="Resources\process.png" />
-    <Content Include="System.Net.Http.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="UI\" />

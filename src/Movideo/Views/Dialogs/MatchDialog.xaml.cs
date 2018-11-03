@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -11,6 +12,8 @@ namespace Grappachu.Apps.Movideo.Views.Dialogs
     /// </summary>
     public partial class MatchDialog
     {
+        private MatchFoundEventArgs _args;
+
         public MatchDialog()
         {
             InitializeComponent(); 
@@ -23,6 +26,7 @@ namespace Grappachu.Apps.Movideo.Views.Dialogs
             {
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
 
+                
                 LblMatchScore = { Text = string.Format("{0:P0}", args.MatchAccuracy) },
                 BadgeScore = { Background = GetColor(args.MatchAccuracy) },
                 ImgPoster = { Source = new BitmapImage(new Uri(args.Movie.ImageUri)) },
@@ -33,6 +37,7 @@ namespace Grappachu.Apps.Movideo.Views.Dialogs
                 TxtFname = { Text = string.Format("Nome File: {0}", args.LocalFile.Path.Name) },
                 TxtFduration = { Text = string.Format("Durata: {0:N0} mins.", args.LocalFile.Duration.TotalMinutes) }
             };
+            dlg._args = args;
 
             var res = dlg.ShowDialog();
             if (res == true)
@@ -73,6 +78,11 @@ namespace Grappachu.Apps.Movideo.Views.Dialogs
         private void MatchDialog_OnLoaded(object sender, RoutedEventArgs e)
         {
            
+        }
+
+        private void BtnPlay_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start(_args.LocalFile.Path.FullName);
         }
     }
 }

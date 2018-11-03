@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Linq;
 using Grappachu.Core.Preview.IO;
 using Grappachu.Movideo.Core.Models;
 using log4net;
@@ -24,10 +23,10 @@ namespace Grappachu.Movideo.Core.Components.MediaOrganizer
 
         private string RenameTemplate
         {
-            get { return _renameTemplate; }
+            get => _renameTemplate;
             set
             {
-                if (!IsTemplateValid(value))
+                if (!TemplateConverter.IsValid(value))
                     throw new ArgumentException("Rename Template is invalid");
                 _renameTemplate = value;
             }
@@ -57,47 +56,19 @@ namespace Grappachu.Movideo.Core.Components.MediaOrganizer
 
         }
 
-        private static bool IsTemplateValid(string value)
-        {
-            var val = value;
 
-            foreach (var token in Tokens.List)
-                val = val.Replace(token, string.Empty);
-
-            return !val.Contains("%");
-        }
 
         private string GetRenamedPath(FileInfo item, Movie movie)
         {
-            var fren = RenameTemplate;
-            fren = fren.Replace(Tokens.Title, movie.Title);
-            fren = fren.Replace(Tokens.Year, movie.Year?.ToString() ?? string.Empty);
-            fren = fren.Replace(Tokens.Collection, movie.Collection);
-            fren = fren.Replace(Tokens.Extension, item.Extension.TrimStart('.'));
-            fren = fren.Replace(Tokens.Genre, movie.Genres.FirstOrDefault()?.Name);
-            fren = fren.Replace(Tokens.AllGenres, string.Join(",", movie.Genres.Select(x => x.Name)));
+            var template = RenameTemplate;
 
-            while (fren.Contains(@"\\"))
-            {
-                fren = fren.Replace(@"\\", @"\");
-            }
-
-            var frenamed = CleanFileName(fren);
+            var frenamed = TemplateConverter.Convert(template, item, movie);
 
             return frenamed;
         }
 
-        private static string CleanFileName(string fileName)
-        {
-            var pathTokens = fileName.Split(new[] { "\\" }, StringSplitOptions.RemoveEmptyEntries);
-            for (int i = 0; i < pathTokens.Length; i++)
-            {
-                var token = pathTokens[i];
-                pathTokens[i] = Path.GetInvalidFileNameChars()
-                .Aggregate(token, (current, c) => current.Replace(c.ToString(), string.Empty));
-            }
-            return string.Join("\\", pathTokens);
-        }
+
+
 
 
         private static string SafeAddSuffix(string fullPath)
@@ -122,17 +93,5 @@ namespace Grappachu.Movideo.Core.Components.MediaOrganizer
             }
             return newFullPath;
         }
-    }
-
-    public static class Tokens
-    {
-        public const string Title = "%title%";
-        public const string Year = "%year%";
-        public const string Extension = "%ext%";
-        public const string Collection = "%collection%";
-        public const string Genre = "%genre%";
-        public const string AllGenres = "%genres%";
-
-        public static readonly string[] List = { Title, Extension, Year, Collection, Genre, AllGenres };
     }
 }

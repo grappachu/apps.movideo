@@ -5,16 +5,24 @@ namespace Grappachu.Movideo.Core.Utils
 {
     public static class StringUtils
     {
-        public static string GetBetween(this string src, string a, string b,
+        /// <summary>
+        /// Gets the first instance of the subtring inside the two portions of string specified.
+        /// </summary>
+        /// <param name="src"></param>
+        /// <param name="beforeStr"></param>
+        /// <param name="afterStr"></param>
+        /// <param name="comparison"></param>
+        /// <returns></returns>
+        public static string TakeBetween(this string src, string beforeStr, string afterStr,
             StringComparison comparison = StringComparison.Ordinal)
         {
-            var idxStr = src.IndexOf(a, comparison);
-            var idxEnd = src.IndexOf(b, comparison);
+            var idxStr = src.IndexOf(beforeStr, comparison);
+            var idxEnd = src.IndexOf(afterStr, comparison);
             if (idxStr >= 0 && idxEnd > 0)
             {
                 if (idxStr > idxEnd)
                     Swap(ref idxStr, ref idxEnd);
-                return src.Substring(idxStr + a.Length, idxEnd - idxStr - a.Length);
+                return src.Substring(idxStr + beforeStr.Length, idxEnd - idxStr - beforeStr.Length);
             }
             return src;
         }

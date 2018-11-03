@@ -107,7 +107,7 @@ namespace Grappachu.Movideo.Core.Components.TitleCleaner
             var str = inputString;
             while (str.IndexOf(openChar) > 0 && str.IndexOf(closeChar) > 0)
             {
-                var dataGraph = str.GetBetween(openChar.ToString(), closeChar.ToString());
+                var dataGraph = str.TakeBetween(openChar.ToString(), closeChar.ToString());
                 if (LooksLikeYear(dataGraph))
                 {
                     maybeYear = int.Parse(dataGraph.Substring(0, 4));

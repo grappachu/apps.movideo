@@ -11,6 +11,9 @@ namespace Grappachu.Movideo.Data.Config
             cfg.CreateMap<Movie, TmdbMovie>();
             cfg.CreateMap<TmdbMovie, Movie>();
 
+            cfg.CreateMap<TmdbGenere, MovieGenere>();
+            cfg.CreateMap<MovieGenere, TmdbGenere>();
+
             //cfg.CreateMap<Permission, PermissionDTO>()
             //    .ForMember(x => x.RequiredParents,
             //        o => o.MapFrom(m => m.RequiredParent == null ? new int[0] : new[] {m.RequiredParent.Id}));

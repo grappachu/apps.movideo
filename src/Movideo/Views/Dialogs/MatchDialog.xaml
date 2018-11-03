@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="" Height="480" Width="480" Loaded="MatchDialog_OnLoaded">
+        Title="" Height="600" Width="600" Loaded="MatchDialog_OnLoaded">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
@@ -14,7 +14,7 @@
             <RowDefinition Height="48"/>
             <RowDefinition Height="31.062"/>
             <RowDefinition Height="21.819"/>
-            <RowDefinition Height="27.181"/> 
+            <RowDefinition Height="27.181"/>
             <RowDefinition Height="2*"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="48"/>
@@ -24,7 +24,7 @@
             <TextBlock FontSize="36" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="Segoe UI Semibold"  >Corrispondenza Trovata!</TextBlock>
         </Grid>
 
-        <Grid Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="3">
+        <Grid Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" Grid.RowSpan="3">
             <Grid.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="#FFA0A0A0" Offset="0.452"/>
@@ -47,13 +47,13 @@
             </Border>
         </Grid>
 
-        <Grid Grid.Row="4" HorizontalAlignment="Stretch" Grid.ColumnSpan="2" >
+        <Grid Grid.Row="4" HorizontalAlignment="Stretch" Grid.ColumnSpan="2" Grid.Column="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="33*"/>
                 <ColumnDefinition Width="66*"/>
             </Grid.ColumnDefinitions>
             <Image x:Name="ImgPoster" Grid.Column="0" Margin="10" VerticalAlignment="Stretch" HorizontalAlignment="Center">
-                
+
             </Image>
             <StackPanel Grid.Column="1" Margin="10"  HorizontalAlignment="Stretch">
                 <TextBlock x:Name="TxtMtitle" Height="24"></TextBlock>
@@ -68,9 +68,11 @@
             <TextBlock x:Name="TxtFduration" Text="Duration: " Height="24"></TextBlock>
         </StackPanel>
 
-
-        <Button x:Name="BtnMatch" Grid.Row="6" Grid.Column="1" Margin="10" Click="BtnMatch_Click">Match</Button> 
-        <Button x:Name="BtnFail" Grid.Row="6" Grid.Column="0" Margin="10"  Click="BtnFail_Click">Fail</Button> 
+        <DockPanel  Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2">
+            <Button x:Name="BtnMatch" DockPanel.Dock="Left" Margin="10" MinWidth="120" Click="BtnMatch_Click">Match</Button>
+            <Button x:Name="BtnFail"  DockPanel.Dock="Right" Margin="10" MinWidth="120" Click="BtnFail_Click">Fail</Button>
+            <Button x:Name="BtnPlay"  HorizontalAlignment="Center" MinWidth="120" Click="BtnPlay_Click">Play</Button>
+        </DockPanel>
 
     </Grid>
 </Window>

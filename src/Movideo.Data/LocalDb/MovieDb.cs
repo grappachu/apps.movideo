@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using AutoMapper;
 using Grappachu.Core.Lang.Extensions;
@@ -13,161 +14,193 @@ namespace Grappachu.Movideo.Data.LocalDb
 {
     public class MovieDb : IMovieDb
     {
-        private readonly MovideoModel _ctx;
 
-
-        public MovieDb()
+        private static MovideoModel CreateContext()
         {
-            _ctx = new MovideoModel();
-            _ctx.TmdbMovies.Count();
+            return new MovideoModel();
         }
+
+
 
         public bool HasMatch(AnalyzedItem item)
         {
-            return _ctx.MediaBindings.Any(x => x.Hash == item.Hash && x.MovieId.HasValue);
+            using (var ctx = CreateContext())
+            {
+                return ctx.MediaBindings.Any(x => x.Hash == item.Hash && x.MovieId.HasValue);
+
+            }
         }
 
         public bool HasHash(FileRef fref)
         {
-            var key = GetKey(fref);
-            var mf = _ctx.MediaFiles.SingleOrDefault(x => x.Key == key);
-            if (!string.IsNullOrEmpty(mf?.Hash) && mf.Bytes == fref.Bytes && mf.LastModifiedUtc == fref.LastModifiedUtc)
-                return true;
-            return false;
+            using (var ctx = CreateContext())
+            {
+                var key = GetKey(fref);
+                var mf = ctx.MediaFiles.SingleOrDefault(x => x.Key == key);
+                if (!string.IsNullOrEmpty(mf?.Hash) && mf.Bytes == fref.Bytes &&
+                    mf.LastModifiedUtc == fref.LastModifiedUtc)
+                    return true;
+                return false;
+            }
         }
 
         public string GetHashFor(FileRef fref)
         {
-            var key = GetKey(fref);
-            var mf = _ctx.MediaFiles.SingleOrDefault(x => x.Key == key);
-            if (!string.IsNullOrEmpty(mf?.Hash) && mf.Bytes == fref.Bytes && mf.LastModifiedUtc == fref.LastModifiedUtc)
-                return mf.Hash;
-            return null;
+            using (var ctx = CreateContext())
+            {
+                var key = GetKey(fref);
+                var mf = ctx.MediaFiles.SingleOrDefault(x => x.Key == key);
+                if (!string.IsNullOrEmpty(mf?.Hash) && mf.Bytes == fref.Bytes &&
+                    mf.LastModifiedUtc == fref.LastModifiedUtc)
+                    return mf.Hash;
+                return null;
+            }
         }
 
         public int? GetMovieIdFor(AnalyzedItem item)
         {
-            return _ctx.MediaBindings.First(x => x.Hash == item.Hash).MovieId;
+            using (var ctx = CreateContext())
+            {
+                return ctx.MediaBindings.First(x => x.Hash == item.Hash).MovieId;
+            }
         }
 
         public void Push(FileRef fref, string hash)
         {
             //Verific l'esistenza di un binding
-            var bind = _ctx.MediaBindings.SingleOrDefault(x => x.Hash == hash);
-            if (bind == null)
+            using (var ctx = CreateContext())
             {
-                bind = _ctx.MediaBindings.Create();
-                bind.Hash = hash;
-                _ctx.MediaBindings.Add(bind);
+                var bind = ctx.MediaBindings.SingleOrDefault(x => x.Hash == hash);
+                if (bind == null)
+                {
+                    bind = ctx.MediaBindings.Create();
+                    bind.Hash = hash;
+                    ctx.MediaBindings.Add(bind);
+                }
+
+                // Verifica l'esistenda di un file
+                var key = GetKey(fref);
+                var file = ctx.MediaFiles.SingleOrDefault(x => x.Key == key);
+                if (file == null)
+                {
+                    file = ctx.MediaFiles.Create();
+                    file.Key = key;
+                    ctx.MediaFiles.Add(file);
+                }
+
+                // Aggiorna il file
+                file.Path = fref.Path;
+                file.Bytes = fref.Bytes;
+                file.Hash = hash;
+                file.LastModifiedUtc = fref.LastModifiedUtc;
+
+                ctx.SaveChanges();
             }
-
-            // Verifica l'esistenda di un file
-            var key = GetKey(fref);
-            var file = _ctx.MediaFiles.SingleOrDefault(x => x.Key == key);
-            if (file == null)
-            {
-                file = _ctx.MediaFiles.Create();
-                file.Key = key;
-                _ctx.MediaFiles.Add(file);
-            }
-
-            // Aggiorna il file
-            file.Path = fref.Path;
-            file.Bytes = fref.Bytes;
-            file.Hash = hash;
-            file.LastModifiedUtc = fref.LastModifiedUtc;
-
-            _ctx.SaveChanges();
         }
 
 
         public Movie GetMovie(int movieId)
         {
-            var dbMovie = _ctx.TmdbMovies.SingleOrDefault(x => x.Id == movieId);
+            using (var ctx = CreateContext())
+            {
+                var dbMovie = ctx.TmdbMovies.SingleOrDefault(x => x.Id == movieId);
 
-            var movie = Mapper.Instance.Map<Movie>(dbMovie);
+                var movie = Mapper.Instance.Map<Movie>(dbMovie);
 
-            return movie;
+                return movie;
+            }
         }
 
         public IEnumerable<Movie> GetMovies()
         {
-            return _ctx.MediaBindings
-                .Include(nameof(MediaBinding.Movie))
-                .Where(mb => mb.Movie != null)
-                .Select(mb => mb.Movie)
-                .ToArray()
-                .Select(Mapper.Map<Movie>)
-                .ToArray();
+            using (var ctx = CreateContext())
+            {
+                var dbItems = ctx.MediaBindings
+                    .Include(nameof(DbMediaBinding.Movie))
+                    .Include(nameof(DbMediaBinding.Movie) + "." + nameof(TmdbMovie.Genres))
+                    .Where(mb => mb.Movie != null)
+                    .Select(mb => mb.Movie)
+                    .ToArray();
+                var mappedItems = dbItems.Select(Mapper.Map<Movie>)
+                    .ToArray();
+                return mappedItems;
+            }
         }
 
 
 
         public void Push(Movie movie)
         {
-            TmdbMovie dbMovie = Mapper.Instance.Map<TmdbMovie>(movie);
+            Debug.Assert(!string.IsNullOrEmpty(movie.ImdbId));
 
-            var mov = _ctx.TmdbMovies
-                // .Include(nameof(TmdbMovie.Genres))
-                .SingleOrDefault(x => x.ImdbId == dbMovie.ImdbId); 
-
-            if (mov != null)
+            using (var ctx = CreateContext())
             {
-                // Update Values
-                //   Mapper.Instance.Map(dbMovie, mov);  
-                mov.Adult = dbMovie.Adult;
-                mov.Collection = dbMovie.Collection;
-                mov.ImageUri = dbMovie.ImageUri;
+                var mov = ctx.TmdbMovies
+                    .Include(nameof(TmdbMovie.Genres))
+                    .SingleOrDefault(x => x.ImdbId == movie.ImdbId);
 
-                mov.ImdbId = mov.ImdbId;
-                mov.Duration = mov.Duration;
-                mov.OriginalLanguage = dbMovie.OriginalLanguage;
-                mov.OriginalTitle = dbMovie.OriginalTitle;
-                mov.Overview = dbMovie.Overview;
-                mov.Popularity = dbMovie.Popularity;
-                mov.PosterPath = dbMovie.PosterPath;
-                mov.ReleaseDate = dbMovie.ReleaseDate;
-                mov.Title = dbMovie.Title;
-                mov.VoteAverage = dbMovie.VoteAverage;
-                mov.VoteCount = dbMovie.VoteCount;
+                if (mov == null)
+                {
+                    mov = ctx.TmdbMovies.Create();
+                    ctx.TmdbMovies.Add(mov);
+                }
 
-                ////  mov.Genres
-                //foreach (var dbMovieGenre in dbMovie.Genres)
-                //{
-                //    var origGenre = mov.Genres.SingleOrDefault(x => x.Id == dbMovieGenre.Id);
-                //    if (origGenre != null)
-                //    {
-                //        origGenre.Name = dbMovieGenre.Name;
-                //    }
-                //    else
-                //    {
+                mov.Adult = movie.Adult;
+                mov.Collection = movie.Collection;
+                mov.ImageUri = movie.ImageUri;
+                mov.ImdbId = movie.ImdbId;
+                mov.Duration = movie.Duration;
+                mov.OriginalLanguage = movie.OriginalLanguage;
+                mov.OriginalTitle = movie.OriginalTitle;
+                mov.Overview = movie.Overview;
+                mov.Popularity = movie.Popularity;
+                mov.PosterPath = movie.PosterPath;
+                mov.ReleaseDate = movie.ReleaseDate;
+                mov.Title = movie.Title;
+                mov.VoteAverage = movie.VoteAverage;
+                mov.VoteCount = movie.VoteCount;
 
-                //    }   
-                //}
-                
+                //  mov.Genres   
+                var genList = new List<TmdbGenere>();
+                foreach (var genre in movie.Genres)
+                {
+                    var dbGenre = GetOrCreateGenre(ctx, genre);
+                    genList.Add(dbGenre);
+                }
+                mov.Genres = genList;
+
+                ctx.SaveChanges();
+
                 movie.Id = mov.Id;
-                _ctx.SaveChanges(); 
             }
-            else
-            {
-                _ctx.TmdbMovies.Add(dbMovie);
-                _ctx.SaveChanges();
-                movie.Id = dbMovie.Id;
-            }
-
         }
+
+        private static TmdbGenere GetOrCreateGenre(MovideoModel ctx, MovieGenere genre)
+        {
+            var dbGenre = ctx.TmdbGeneres.SingleOrDefault(x => x.Id == genre.Id);
+            if (dbGenre == null)
+            {
+                dbGenre = ctx.TmdbGeneres.Add(new TmdbGenere { Id = genre.Id, Name = genre.Name });
+            }
+            return dbGenre;
+        }
+
 
         public void Push(string hash, int movieId)
         {
-            var binding = _ctx.MediaBindings.SingleOrDefault(x => x.Hash == hash);
-            if (binding == null)
+            using (var ctx = CreateContext())
             {
-                binding = _ctx.MediaBindings.Create();
-                binding.Hash = hash;
-                _ctx.MediaBindings.Add(binding);
+                var binding = ctx.MediaBindings.SingleOrDefault(x => x.Hash == hash);
+                if (binding == null)
+                {
+                    binding = ctx.MediaBindings.Create();
+                    binding.Hash = hash;
+                    ctx.MediaBindings.Add(binding);
+                }
+
+                binding.MovieId = movieId;
+                ctx.SaveChanges();
             }
-            binding.MovieId = movieId;
-            _ctx.SaveChanges();
         }
 
 

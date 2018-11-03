@@ -28,10 +28,9 @@ namespace Grappachu.Apps.Movideo.ViewModels
         public OrganizeControlPresenter()
         {
             _movideoApp = AppFactory.GetInstance();
-
             _movideoApp.ProgressChanged += (sender, args) => ProgressBarValue = args.ProgressPercentage;
             _movideoApp.MatchFound += _movideo_MatchFound;
-
+           
             RaisePropertyChangedEvent(nameof(CurrentJob));
         }
 

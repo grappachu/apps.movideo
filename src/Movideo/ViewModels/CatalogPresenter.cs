@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using Grappachu.Apps.Movideo.Common;
 using Grappachu.Apps.Movideo.Config;
@@ -13,13 +14,13 @@ namespace Grappachu.Apps.Movideo.ViewModels
     public class NavBarAction
     {
         public string Title { get; set; }
-      
     }
 
     public class CatalogPresenter : ObservableObject
     {
         private readonly MovideoApp _movideoApp;
         private ICommand _deleteMovieCommand;
+        public static readonly DependencyProperty SelectedMovieProperty = DependencyProperty.Register("SelectedMovie", typeof(Movie), typeof(CatalogPresenter), new PropertyMetadata(default(Movie)));
 
 
         public CatalogPresenter()
@@ -37,8 +38,7 @@ namespace Grappachu.Apps.Movideo.ViewModels
             movies.AddRange(_movideoApp.GetCatalog());
             Movies = movies;
             RaisePropertyChangedEvent(nameof(Movies));
-        }
-
+        } 
 
         public ICommand DeleteMovieCommand
         {
@@ -54,6 +54,12 @@ namespace Grappachu.Apps.Movideo.ViewModels
                     );
                 return _deleteMovieCommand;
             }
+        }
+
+        public Movie SelectedMovie
+        {
+            get { return (Movie) GetValue(SelectedMovieProperty); }
+            set { SetValue(SelectedMovieProperty, value); }
         }
 
         private async void LoadCatalogAsync()

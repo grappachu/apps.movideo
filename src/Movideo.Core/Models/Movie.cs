@@ -27,7 +27,7 @@ namespace Grappachu.Movideo.Core.Models
 
         public string PosterPath { get; set; }
 
-        public IEnumerable<MovieGenere> Genres { get; set; }
+        public ICollection<MovieGenere> Genres { get; set; }
         public DateTime? ReleaseDate { get; set; }
 
         public string Collection { get; set; }

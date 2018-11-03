@@ -68,6 +68,8 @@
   <ItemGroup>
     <Compile Include="ApiSettings.cs" />
     <Compile Include="Components\MediaOrganizer\DirectoryCleaner.cs" />
+    <Compile Include="Components\MediaOrganizer\TemplateConverter.cs" />
+    <Compile Include="Components\MediaOrganizer\Tokens.cs" />
     <Compile Include="Components\Remoting\Interfaces\IMovieFinder.cs" />
     <Compile Include="Components\Remoting\Interfaces\ITmdbClientFactory.cs" />
     <Compile Include="Components\Remoting\MovieFinder.cs" />
