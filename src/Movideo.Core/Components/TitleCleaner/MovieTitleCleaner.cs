@@ -105,7 +105,7 @@ namespace Grappachu.Movideo.Core.Components.TitleCleaner
         private static string RemoveBrackets(string inputString, char openChar, char closeChar, ref int? maybeYear)
         {
             var str = inputString;
-            while (str.IndexOf(openChar) > 0 && str.IndexOf(closeChar) > 0)
+            while (str.IndexOf(openChar) >= 0 && str.IndexOf(closeChar) > 0)
             {
                 var dataGraph = str.TakeBetween(openChar.ToString(), closeChar.ToString());
                 if (LooksLikeYear(dataGraph))

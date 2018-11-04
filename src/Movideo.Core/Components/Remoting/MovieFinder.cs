@@ -40,7 +40,7 @@ namespace Grappachu.Movideo.Core.Components.Remoting
             foreach (var token in tokens)
             {
                 var results = apiClient.SearchMovieAsync(token).Result;
-
+              
                 Log.Debug($"Got {results.Results.Count:N0} of {results.TotalResults:N0} results");
                 foreach (var result in results.Results)
                 {
