@@ -17,13 +17,14 @@ namespace Grappachu.Movideo.Core.Utils
             StringComparison comparison = StringComparison.Ordinal)
         {
             var idxStr = src.IndexOf(beforeStr, comparison);
-            var idxEnd = src.IndexOf(afterStr, comparison);
+            var idxEnd = src.IndexOf(afterStr, idxStr + 1, comparison);
             if (idxStr >= 0 && idxEnd > 0)
             {
                 if (idxStr > idxEnd)
                     Swap(ref idxStr, ref idxEnd);
                 return src.Substring(idxStr + beforeStr.Length, idxEnd - idxStr - beforeStr.Length);
             }
+
             return src;
         }
 
@@ -39,5 +40,7 @@ namespace Grappachu.Movideo.Core.Utils
             var regex = new Regex(string.Format("\\{0}.*?\\{1}", begin, end));
             return regex.Replace(s, replacement ?? string.Empty);
         }
+
+
     }
 }

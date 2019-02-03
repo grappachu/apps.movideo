@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace Grappachu.Movideo.Core.Components.TitleCleaner
         {
             ReservedWords = new[]
             {
-                SpecialMarker, "hevc", "bdrip", "dvdrip", "Bluray", "x264", "h264", "AC3", "DTS", "480p", "720p", "1080p"
+                SpecialMarker, "hevc", "bdrip", "dvdrip", "Bluray", "x264", "h264", "AC3", "DTS", "480p", "720p", "1080p", "AAC-LC", "AAC"
             };
             var cultures = CultureInfo.GetCultures(CultureTypes.AllCultures);
             var l = cultures.Select(x => x.EnglishName).ToList();
@@ -26,7 +27,7 @@ namespace Grappachu.Movideo.Core.Components.TitleCleaner
             Languages = l.Distinct().ToArray();
 
 
-            SpaceChars = new[] { ".", "_", " " };
+            SpaceChars = new[] { ".", "_", " ", "," };
         }
 
 
@@ -75,23 +76,26 @@ namespace Grappachu.Movideo.Core.Components.TitleCleaner
             if (!maybeYear.HasValue)
             {
                 var resplit = title.Split(SpaceChars, StringSplitOptions.RemoveEmptyEntries);
-                var last = resplit.Last();
-                if (LooksLikeYear(last))
+                for (int i = resplit.Length-1; i > 0; i--)
                 {
-                    maybeYear = int.Parse(last);
-                    title = title.Replace(last, string.Empty).Trim();
-                }
+                    var last = resplit.ElementAt(i);
+                    if (LooksLikeYear(last))
+                    {
+                        maybeYear = int.Parse(last);
+                        title = string.Join(" ", resplit.Take(i)).Trim();  // title.Replace(last, string.Empty);
+                        break;
+                    }
+                } 
             }
 
 
             // TODO: review this. when there's one dash separates main title from subtitle 
-            var res = new MovieTitleCleanerResult();
-            res.Year = maybeYear;
+            var res = new MovieTitleCleanerResult { Year = maybeYear };
             if (title.Count(x => x == '-') == 1)
             {
                 var sp = title.Split('-');
-                res.Title = sp[0];
-                res.SubTitle = sp[1];
+                res.Title = sp[0].Trim();
+                res.SubTitle = sp[1].Trim();
             }
             else
             {
@@ -104,6 +108,7 @@ namespace Grappachu.Movideo.Core.Components.TitleCleaner
 
         private static string RemoveBrackets(string inputString, char openChar, char closeChar, ref int? maybeYear)
         {
+            Debug.Assert(openChar != closeChar, "Brackets cannot be same");
             var str = inputString;
             while (str.IndexOf(openChar) >= 0 && str.IndexOf(closeChar) > 0)
             {
@@ -127,9 +132,14 @@ namespace Grappachu.Movideo.Core.Components.TitleCleaner
             return str;
         }
 
+
+ 
         private static bool LooksLikeYear(string dataRound)
         {
             return Regex.IsMatch(dataRound, "^(19|20)[0-9][0-9]") && dataRound.Length == 4;
         }
     }
+
+
+    
 }

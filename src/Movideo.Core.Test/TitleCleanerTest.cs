@@ -10,7 +10,7 @@ namespace Grappachu.Movideo.Core.Test
         [InlineData("Avengers.Confidential.La.Vedova.Nera.E.Punisher.2014.iTALiAN.Bluray.720p.x264 - BG.mkv",
             "Avengers Confidential La Vedova Nera E Punisher", 2014)]
         [InlineData("Fuck You, Prof! (2013) BDRip 720p HEVC ITA GER AC3 Multi Sub PirateMKV.mkv",
-            "Fuck You, Prof!", 2013)]
+            "Fuck You Prof!", 2013)]
         [InlineData("Il Libro della Giungla(2016)(BDrip1080p_H264_AC3 5.1 Ita Eng_Sub Ita Eng)by siste82.avi",
             "Il Libro della Giungla", 2016)]
         [InlineData("Il primo dei bugiardi (2009) [Mux by Little-Boy]", "Il primo dei bugiardi", 2009)]
@@ -27,6 +27,7 @@ namespace Grappachu.Movideo.Core.Test
         [InlineData("Transcendence.mkv", "Transcendence", null)]
         [InlineData("Being Human (Forsyth, 1994).mkv", "Being Human", 1994)]
         [InlineData("Il.Secondo.Tragico.Fantozzi.1976.DVDRip-AVC.mkv", "Il secondo tragico Fantozzi", 1976)]
+        [InlineData("Deadpool - 2016 - 108 min - AAC-LC Italian, AC3 English - BDRip CRUSADERS.mkv", "Deadpool", 2016)]
         public void Clean_should_return_title_and_year_when_possible(string filename, string title, int? year)
         {
             var res = MovieTitleCleaner.Clean(filename);
